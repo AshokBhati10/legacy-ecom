@@ -1,0 +1,77 @@
+@model Ecommerce.Core.ViewModels.CartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+<h2>Shopping Cart</h2>
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-info">
+        Your cart is empty. @Html.ActionLink("Continue shopping", "Index", "Product").
+    </div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Line Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.ProductName, "Detail", "Product", new { id = item.ProductId }, null)
+                        @if (!string.IsNullOrWhiteSpace(item.VariantName))
+                        { <br /><small class="text-muted">@item.VariantName</small> }
+                    </td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("Update", "Cart", FormMethod.Post, new { @class = "form-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("productId", item.ProductId)
+                            @Html.Hidden("variantId", item.VariantId)
+                            <input type="number" name="quantity" value="@item.Quantity" min="0" max="99" class="form-control input-sm" style="width:70px" />
+                            <button type="submit" class="btn btn-default btn-sm">Update</button>
+                        }
+                    </td>
+                    <td>@item.LineTotal.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("Remove", "Cart", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("productId", item.ProductId)
+                            @Html.Hidden("variantId", item.VariantId)
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Subtotal (@Model.ItemCount item(s)):</strong></td>
+                <td colspan="2"><strong>@Model.SubTotal.ToString("C")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("Clear", "Cart", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning">Clear Cart</button>
+            }
+        </div>
+        <div class="col-md-6 text-right">
+            @Html.ActionLink("Continue Shopping", "Index", "Product", null, new { @class = "btn btn-default" })
+            @Html.ActionLink("Proceed to Checkout", "Address", "Checkout", null, new { @class = "btn btn-success" })
+        </div>
+    </div>
+}

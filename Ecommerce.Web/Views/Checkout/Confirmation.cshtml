@@ -1,0 +1,79 @@
+@model Ecommerce.Core.Entities.Order
+@{
+    ViewBag.Title = "Order Confirmation";
+}
+<h2>Checkout</h2>
+<ol class="breadcrumb checkout-steps">
+    <li>1. Address</li>
+    <li>2. Shipping</li>
+    <li>3. Payment</li>
+    <li class="active">4. Confirmation</li>
+</ol>
+
+<div class="alert alert-success">
+    <h4>Thank you! Your order has been placed.</h4>
+    <p>Order number: <strong>@Model.OrderNumber</strong></p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="panel-title">Order Details</h4></div>
+            <div class="panel-body">
+                <p><strong>Order number:</strong> @Model.OrderNumber</p>
+                <p><strong>Date:</strong> @Model.OrderDate.ToLocalTime().ToString("g")</p>
+                <p><strong>Status:</strong> @Model.Status</p>
+                <p><strong>Shipping method:</strong> @Model.ShippingMethod</p>
+                <p><strong>Payment method:</strong> @Model.PaymentMethod</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="panel-title">Shipping Address</h4></div>
+            <div class="panel-body">
+                <p>
+                    @Model.ShipFirstName @Model.ShipLastName<br />
+                    @Model.ShipStreet<br />
+                    @Model.ShipCity, @Model.ShipState @Model.ShipPostalCode<br />
+                    @Model.ShipCountry<br />
+                    @Model.ShipEmail
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Line Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.OrderLines)
+        {
+            <tr>
+                <td>
+                    @line.ProductName
+                    @if (!string.IsNullOrWhiteSpace(line.VariantName))
+                    { <br /><small class="text-muted">@line.VariantName</small> }
+                </td>
+                <td>@line.UnitPrice.ToString("C")</td>
+                <td>@line.Quantity</td>
+                <td>@line.LineTotal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr><td colspan="3" class="text-right">Subtotal:</td><td>@Model.SubTotal.ToString("C")</td></tr>
+        <tr><td colspan="3" class="text-right">Shipping:</td><td>@Model.ShippingCost.ToString("C")</td></tr>
+        <tr><td colspan="3" class="text-right">Tax:</td><td>@Model.TaxAmount.ToString("C")</td></tr>
+        <tr><td colspan="3" class="text-right"><strong>Total:</strong></td><td><strong>@Model.Total.ToString("C")</strong></td></tr>
+    </tfoot>
+</table>
+
+<p>@Html.ActionLink("Continue Shopping", "Index", "Product", null, new { @class = "btn btn-primary" })</p>

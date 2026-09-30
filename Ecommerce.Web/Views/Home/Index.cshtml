@@ -1,0 +1,37 @@
+@model Ecommerce.Core.ViewModels.ProductListViewModel
+@{
+    ViewBag.Title = "Home";
+    var categories = ViewBag.Categories as IList<Ecommerce.Core.Entities.Category>;
+}
+<div class="jumbotron hero-banner">
+    <h1>Welcome to Legacy eCommerce</h1>
+    <p class="lead">A classic ASP.NET MVC 5 storefront — browse the catalog, filter products, and check out in a few easy steps.</p>
+    <p>@Html.ActionLink("Shop all products", "Index", "Product", null, new { @class = "btn btn-primary btn-lg" })</p>
+</div>
+
+@if (categories != null && categories.Count > 0)
+{
+    <h2>Featured Categories</h2>
+    <div class="row">
+        @foreach (var c in categories.Take(4))
+        {
+            <div class="col-sm-6 col-md-3">
+                <div class="panel panel-default category-tile">
+                    <div class="panel-body text-center">
+                        <h4>@c.Name</h4>
+                        <p class="text-muted">@c.Description</p>
+                        @Html.ActionLink("Browse", "Index", "Product", new { categoryId = c.Id }, new { @class = "btn btn-default btn-sm" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2>Latest Products</h2>
+<div class="row">
+    @foreach (var p in Model.Products)
+    {
+        @Html.Partial("_ProductCard", p)
+    }
+</div>

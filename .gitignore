@@ -1,0 +1,44 @@
+## Visual Studio / .NET Framework
+.vs/
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+## Build
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+## Publish
+**/Publish/
+**/app.publish/
+PublishProfiles/
+
+## OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Secrets / local-only (never commit)
+*.pfx
+*.p12
+Web.local.config
+appsettings.*.json
+.env

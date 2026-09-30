@@ -1,0 +1,33 @@
+@model Ecommerce.Core.ViewModels.ProductListViewModel
+@* Product grid fragment. Returned by GET /Product/Filter for AJAX replacement. *@
+@if (Model.Products.Count == 0)
+{
+    <div class="alert alert-info">No products match your filter. Try different keywords or another category.</div>
+}
+else
+{
+    <p class="text-muted">
+        Showing @Model.Products.Count of @Model.TotalCount product(s)
+        @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+        { <text>for "<strong>@Model.SearchQuery</strong>"</text> }
+    </p>
+    <div class="row">
+        @foreach (var p in Model.Products)
+        {
+            @Html.Partial("_ProductCard", p)
+        }
+    </div>
+    if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Product pages">
+            <ul class="pagination" id="product-pager">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="@(i == Model.Page ? "active" : "")">
+                        <a href="@Url.Action("Filter", "Product", new { categoryId = Model.SelectedCategoryId, q = Model.SearchQuery, page = i })" data-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}

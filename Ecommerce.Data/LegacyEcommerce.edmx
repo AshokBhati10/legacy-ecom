@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!--
+    LegacyEcommerce.edmx — Database First mapping for LegacyEcommerceDb.
+
+    The database is created from Database/CreateDatabase.sql; this EDMX maps the
+    existing tables (storage model) to the POCO classes under Ecommerce.Data.Models
+    (conceptual model). Code generation strategy is None: entity classes are
+    hand-written to match the conceptual model exactly.
+
+    Runtime mapping is embedded by the EntityDeploy build action and loaded through
+    the "EcommerceDb" EntityClient connection string in Web.config:
+      metadata=res://*/LegacyEcommerce.csdl|res://*/LegacyEcommerce.ssdl|res://*/LegacyEcommerce.msl
+  -->
+  <edmx:Runtime>
+    <edmx:StorageModels>
+      <Schema Namespace="LegacyEcommerceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="LegacyEcommerceModelStoreContainer">
+          <EntitySet Name="Addresses" EntityType="LegacyEcommerceModel.Store.Addresses" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CartItems" EntityType="LegacyEcommerceModel.Store.CartItems" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Categories" EntityType="LegacyEcommerceModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Customers" EntityType="LegacyEcommerceModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OrderLines" EntityType="LegacyEcommerceModel.Store.OrderLines" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Orders" EntityType="LegacyEcommerceModel.Store.Orders" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductImages" EntityType="LegacyEcommerceModel.Store.ProductImages" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductVariants" EntityType="LegacyEcommerceModel.Store.ProductVariants" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Products" EntityType="LegacyEcommerceModel.Store.Products" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Addresses_Customers" Association="LegacyEcommerceModel.Store.FK_Addresses_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Addresses" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Categories" Association="LegacyEcommerceModel.Store.FK_Categories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLines_Orders" Association="LegacyEcommerceModel.Store.FK_OrderLines_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLines_Products" Association="LegacyEcommerceModel.Store.FK_OrderLines_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="LegacyEcommerceModel.Store.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductImages_Products" Association="LegacyEcommerceModel.Store.FK_ProductImages_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductImages" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductVariants_Products" Association="LegacyEcommerceModel.Store.FK_ProductVariants_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductVariants" EntitySet="ProductVariants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Categories" Association="LegacyEcommerceModel.Store.FK_Products_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Addresses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="Label" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Street" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="30" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CartItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="VariantId" Type="int" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ParentCategoryId" Type="int" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="30" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderLines">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="VariantId" Type="int" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="VariantName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="LineTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SubTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ShippingCost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TaxAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ShippingMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShipFirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ShipLastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ShipEmail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ShipPhone" Type="nvarchar" MaxLength="30" />
+          <Property Name="ShipStreet" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ShipCity" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ShipState" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ShipPostalCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ShipCountry" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductImages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="AltText" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisplayOrder" Type="int" Nullable="false" />
+          <Property Name="IsMain" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductVariants">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" />
+          <Property Name="PriceAdjustment" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Slug" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SalePrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="ThumbnailUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsFeatured" Type="bit" Nullable="false" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Addresses_Customers">
+          <End Role="Customers" Type="LegacyEcommerceModel.Store.Customers" Multiplicity="1" />
+          <End Role="Addresses" Type="LegacyEcommerceModel.Store.Addresses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Addresses">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Categories">
+          <End Role="Categories" Type="LegacyEcommerceModel.Store.Categories" Multiplicity="0..1" />
+          <End Role="Categories1" Type="LegacyEcommerceModel.Store.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Categories1">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLines_Orders">
+          <End Role="Orders" Type="LegacyEcommerceModel.Store.Orders" Multiplicity="1" />
+          <End Role="OrderLines" Type="LegacyEcommerceModel.Store.OrderLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLines_Products">
+          <End Role="Products" Type="LegacyEcommerceModel.Store.Products" Multiplicity="1" />
+          <End Role="OrderLines" Type="LegacyEcommerceModel.Store.OrderLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="LegacyEcommerceModel.Store.Customers" Multiplicity="0..1" />
+          <End Role="Orders" Type="LegacyEcommerceModel.Store.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductImages_Products">
+          <End Role="Products" Type="LegacyEcommerceModel.Store.Products" Multiplicity="1" />
+          <End Role="ProductImages" Type="LegacyEcommerceModel.Store.ProductImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductImages">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductVariants_Products">
+          <End Role="Products" Type="LegacyEcommerceModel.Store.Products" Multiplicity="1" />
+          <End Role="ProductVariants" Type="LegacyEcommerceModel.Store.ProductVariants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductVariants">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Categories">
+          <End Role="Categories" Type="LegacyEcommerceModel.Store.Categories" Multiplicity="1" />
+          <End Role="Products" Type="LegacyEcommerceModel.Store.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ecommerce.Data.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="LegacyEcommerceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Addresses" EntityType="Ecommerce.Data.Models.Address" />
+          <EntitySet Name="CartItems" EntityType="Ecommerce.Data.Models.CartItem" />
+          <EntitySet Name="Categories" EntityType="Ecommerce.Data.Models.Category" />
+          <EntitySet Name="Customers" EntityType="Ecommerce.Data.Models.Customer" />
+          <EntitySet Name="OrderLines" EntityType="Ecommerce.Data.Models.OrderLine" />
+          <EntitySet Name="Orders" EntityType="Ecommerce.Data.Models.Order" />
+          <EntitySet Name="ProductImages" EntityType="Ecommerce.Data.Models.ProductImage" />
+          <EntitySet Name="ProductVariants" EntityType="Ecommerce.Data.Models.ProductVariant" />
+          <EntitySet Name="Products" EntityType="Ecommerce.Data.Models.Product" />
+          <AssociationSet Name="Category_ChildCategories" Association="Ecommerce.Data.Models.Category_ChildCategories">
+            <End Role="ParentCategory" EntitySet="Categories" />
+            <End Role="ChildCategories" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="Category_Products" Association="Ecommerce.Data.Models.Category_Products">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="Customer_Addresses" Association="Ecommerce.Data.Models.Customer_Addresses">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Addresses" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="Customer_Orders" Association="Ecommerce.Data.Models.Customer_Orders">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="Order_OrderLines" Association="Ecommerce.Data.Models.Order_OrderLines">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="Product_OrderLines" Association="Ecommerce.Data.Models.Product_OrderLines">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="Product_ProductImages" Association="Ecommerce.Data.Models.Product_ProductImages">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Images" EntitySet="ProductImages" />
+          </AssociationSet>
+          <AssociationSet Name="Product_ProductVariants" Association="Ecommerce.Data.Models.Product_ProductVariants">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Variants" EntitySet="ProductVariants" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Label" Type="String" MaxLength="50" />
+          <Property Name="FirstName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="250" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="30" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Ecommerce.Data.Models.Customer_Addresses" FromRole="Addresses" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="CartItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="VariantId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" />
+          <Property Name="ParentCategoryId" Type="Int32" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Ecommerce.Data.Models.Category_Products" FromRole="Category" ToRole="Products" />
+          <NavigationProperty Name="ChildCategories" Relationship="Ecommerce.Data.Models.Category_ChildCategories" FromRole="ParentCategory" ToRole="ChildCategories" />
+          <NavigationProperty Name="ParentCategory" Relationship="Ecommerce.Data.Models.Category_ChildCategories" FromRole="ChildCategories" ToRole="ParentCategory" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" />
+          <Property Name="FirstName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="30" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Ecommerce.Data.Models.Customer_Orders" FromRole="Customer" ToRole="Orders" />
+          <NavigationProperty Name="Addresses" Relationship="Ecommerce.Data.Models.Customer_Addresses" FromRole="Customer" ToRole="Addresses" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="UserId" Type="String" MaxLength="128" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TaxAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ShippingMethod" Type="String" MaxLength="50" Nullable="false" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" Nullable="false" />
+          <Property Name="ShipFirstName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="ShipLastName" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="ShipEmail" Type="String" MaxLength="256" Nullable="false" />
+          <Property Name="ShipPhone" Type="String" MaxLength="30" />
+          <Property Name="ShipStreet" Type="String" MaxLength="250" Nullable="false" />
+          <Property Name="ShipCity" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="ShipState" Type="String" MaxLength="100" Nullable="false" />
+          <Property Name="ShipPostalCode" Type="String" MaxLength="20" Nullable="false" />
+          <Property Name="ShipCountry" Type="String" MaxLength="100" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Ecommerce.Data.Models.Customer_Orders" FromRole="Orders" ToRole="Customer" />
+          <NavigationProperty Name="OrderLines" Relationship="Ecommerce.Data.Models.Order_OrderLines" FromRole="Order" ToRole="OrderLines" />
+        </EntityType>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="VariantId" Type="Int32" />
+          <Property Name="ProductName" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="VariantName" Type="String" MaxLength="200" />
+          <Property Name="Sku" Type="String" MaxLength="50" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="LineTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Ecommerce.Data.Models.Order_OrderLines" FromRole="OrderLines" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_OrderLines" FromRole="OrderLines" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sku" Type="String" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="Slug" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="500" />
+          <Property Name="Description" Type="String" MaxLength="Max" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SalePrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ThumbnailUrl" Type="String" MaxLength="500" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsFeatured" Type="Boolean" Nullable="false" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Ecommerce.Data.Models.Category_Products" FromRole="Products" ToRole="Category" />
+          <NavigationProperty Name="Images" Relationship="Ecommerce.Data.Models.Product_ProductImages" FromRole="Product" ToRole="Images" />
+          <NavigationProperty Name="Variants" Relationship="Ecommerce.Data.Models.Product_ProductVariants" FromRole="Product" ToRole="Variants" />
+          <NavigationProperty Name="OrderLines" Relationship="Ecommerce.Data.Models.Product_OrderLines" FromRole="Product" ToRole="OrderLines" />
+        </EntityType>
+        <EntityType Name="ProductImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="500" Nullable="false" />
+          <Property Name="AltText" Type="String" MaxLength="200" />
+          <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <Property Name="IsMain" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_ProductImages" FromRole="Images" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="ProductVariant">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <Property Name="Sku" Type="String" MaxLength="50" />
+          <Property Name="PriceAdjustment" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_ProductVariants" FromRole="Variants" ToRole="Product" />
+        </EntityType>
+        <Association Name="Category_ChildCategories">
+          <End Role="ParentCategory" Type="Ecommerce.Data.Models.Category" Multiplicity="0..1" />
+          <End Role="ChildCategories" Type="Ecommerce.Data.Models.Category" Multiplicity="*" />
+        </Association>
+        <Association Name="Category_Products">
+          <End Role="Category" Type="Ecommerce.Data.Models.Category" Multiplicity="1" />
+          <End Role="Products" Type="Ecommerce.Data.Models.Product" Multiplicity="*" />
+        </Association>
+        <Association Name="Customer_Addresses">
+          <End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="1" />
+          <End Role="Addresses" Type="Ecommerce.Data.Models.Address" Multiplicity="*" />
+        </Association>
+        <Association Name="Customer_Orders">
+          <End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="1" />
+          <End Role="Orders" Type="Ecommerce.Data.Models.Order" Multiplicity="*" />
+        </Association>
+        <Association Name="Order_OrderLines">
+          <End Role="Order" Type="Ecommerce.Data.Models.Order" Multiplicity="1" />
+          <End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        </Association>
+        <Association Name="Product_OrderLines">
+          <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        </Association>
+        <Association Name="Product_ProductImages">
+          <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <End Role="Images" Type="Ecommerce.Data.Models.ProductImage" Multiplicity="*" />
+        </Association>
+        <Association Name="Product_ProductVariants">
+          <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <End Role="Variants" Type="Ecommerce.Data.Models.ProductVariant" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LegacyEcommerceModelStoreContainer" CdmEntityContainer="LegacyEcommerceEntities">
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.Address">
+              <MappingFragment StoreEntitySet="Addresses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartItems">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.CartItem">
+              <MappingFragment StoreEntitySet="CartItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ParentCategoryId" ColumnName="ParentCategoryId" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLines">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.OrderLine">
+              <MappingFragment StoreEntitySet="OrderLines">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="VariantName" ColumnName="VariantName" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
+                <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="ShippingMethod" ColumnName="ShippingMethod" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="ShipFirstName" ColumnName="ShipFirstName" />
+                <ScalarProperty Name="ShipLastName" ColumnName="ShipLastName" />
+                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
+                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ScalarProperty Name="ShipStreet" ColumnName="ShipStreet" />
+                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
+                <ScalarProperty Name="ShipPostalCode" ColumnName="ShipPostalCode" />
+                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductImages">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.ProductImage">
+              <MappingFragment StoreEntitySet="ProductImages">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="IsMain" ColumnName="IsMain" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductVariants">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.ProductVariant">
+              <MappingFragment StoreEntitySet="ProductVariants">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ScalarProperty Name="PriceAdjustment" ColumnName="PriceAdjustment" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="Ecommerce.Data.Models.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ThumbnailUrl" ColumnName="ThumbnailUrl" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsFeatured" ColumnName="IsFeatured" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Category_ChildCategories" TypeName="Ecommerce.Data.Models.Category_ChildCategories" StoreEntitySet="Categories">
+            <EndProperty Name="ParentCategory">
+              <ScalarProperty Name="Id" ColumnName="ParentCategoryId" />
+            </EndProperty>
+            <EndProperty Name="ChildCategories">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Category_Products" TypeName="Ecommerce.Data.Models.Category_Products" StoreEntitySet="Products">
+            <EndProperty Name="Category">
+              <ScalarProperty Name="Id" ColumnName="CategoryId" />
+            </EndProperty>
+            <EndProperty Name="Products">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Customer_Addresses" TypeName="Ecommerce.Data.Models.Customer_Addresses" StoreEntitySet="Addresses">
+            <EndProperty Name="Customer">
+              <ScalarProperty Name="Id" ColumnName="CustomerId" />
+            </EndProperty>
+            <EndProperty Name="Addresses">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Customer_Orders" TypeName="Ecommerce.Data.Models.Customer_Orders" StoreEntitySet="Orders">
+            <EndProperty Name="Customer">
+              <ScalarProperty Name="Id" ColumnName="CustomerId" />
+            </EndProperty>
+            <EndProperty Name="Orders">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Order_OrderLines" TypeName="Ecommerce.Data.Models.Order_OrderLines" StoreEntitySet="OrderLines">
+            <EndProperty Name="Order">
+              <ScalarProperty Name="Id" ColumnName="OrderId" />
+            </EndProperty>
+            <EndProperty Name="OrderLines">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Product_OrderLines" TypeName="Ecommerce.Data.Models.Product_OrderLines" StoreEntitySet="OrderLines">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="Id" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="OrderLines">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Product_ProductImages" TypeName="Ecommerce.Data.Models.Product_ProductImages" StoreEntitySet="ProductImages">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="Id" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="Images">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Product_ProductVariants" TypeName="Ecommerce.Data.Models.Product_ProductVariants" StoreEntitySet="ProductVariants">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="Id" ColumnName="ProductId" />
+            </EndProperty>
+            <EndProperty Name="Variants">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <edmx:Designer>
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options />
+    <edmx:Diagrams>
+      <Diagram DiagramId="9a7b3c1d-2e4f-4a5b-8c6d-7e8f9a0b1c2d" Name="Diagram1">
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.Address" Width="1.5" PointX="0.75" PointY="0.75" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.CartItem" Width="1.5" PointX="2.75" PointY="0.75" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.Category" Width="1.5" PointX="4.75" PointY="0.75" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.Customer" Width="1.5" PointX="6.75" PointY="0.75" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.Order" Width="1.5" PointX="0.75" PointY="4.0" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.OrderLine" Width="1.5" PointX="2.75" PointY="4.0" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.Product" Width="1.5" PointX="4.75" PointY="4.0" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.ProductImage" Width="1.5" PointX="6.75" PointY="4.0" Height="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ecommerce.Data.Models.ProductVariant" Width="1.5" PointX="8.75" PointY="4.0" Height="2.5" IsExpanded="true" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Category_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Category_ChildCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Customer_Addresses" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Customer_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Order_OrderLines" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Product_OrderLines" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Product_ProductImages" ManuallyRouted="false" />
+        <AssociationConnector Association="Ecommerce.Data.Models.Product_ProductVariants" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

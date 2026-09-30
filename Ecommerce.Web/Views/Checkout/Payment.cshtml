@@ -1,0 +1,106 @@
+@model Ecommerce.Core.ViewModels.CheckoutPaymentViewModel
+@{
+    ViewBag.Title = "Checkout - Payment";
+    var summary = ViewBag.Summary as Ecommerce.Core.ViewModels.CheckoutSummaryViewModel;
+}
+<h2>Checkout</h2>
+<ol class="breadcrumb checkout-steps">
+    <li>@Html.ActionLink("1. Address", "Address", "Checkout")</li>
+    <li>@Html.ActionLink("2. Shipping", "Shipping", "Checkout")</li>
+    <li class="active">3. Payment</li>
+    <li>4. Confirmation</li>
+</ol>
+
+<div class="row">
+    <div class="col-md-7">
+        @using (Html.BeginForm("Payment", "Checkout", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "payment-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <h4>Payment method</h4>
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "CashOnDelivery", new { id = "pm-cod" })
+                    <strong>Cash on Delivery</strong> <small class="text-muted">- pay when your order arrives</small>
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(m => m.PaymentMethod, "Card", new { id = "pm-card" })
+                    <strong>Credit / Debit Card</strong> <small class="text-muted">- demo only, no real charge is made</small>
+                </label>
+            </div>
+
+            <div id="card-fields" style="display:none">
+                <h4>Card details</h4>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CardholderName, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.CardholderName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CardholderName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CardNumber, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Expiry", new { @class = "col-md-3 control-label" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(m => m.ExpiryMonth,
+                            Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString("00") }),
+                            "-- MM --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-5">
+                        @Html.DropDownListFor(m => m.ExpiryYear,
+                            Enumerable.Range(System.DateTime.Now.Year, 15).Select(y => new SelectListItem { Value = y.ToString(), Text = y.ToString() }),
+                            "-- YYYY --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Cvv, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.Cvv, new { @class = "form-control", autocomplete = "off", style = "width:100px" })
+                        @Html.ValidationMessageFor(m => m.Cvv, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <p class="text-muted"><small>Demo checkout — card details are validated in the browser and on the server, and are never stored.</small></p>
+            </div>
+
+            <div class="form-group" style="margin-top:15px">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="panel-title">Order Summary</h4></div>
+            <div class="panel-body">
+                @if (summary != null)
+                {
+                    foreach (var item in summary.Items)
+                    {
+                        <p>@item.Quantity x @item.ProductName <span class="pull-right">@item.LineTotal.ToString("C")</span></p>
+                    }
+                    <hr />
+                    <p>Subtotal: <span class="pull-right">@summary.SubTotal.ToString("C")</span></p>
+                    <p>Shipping (@summary.ShippingMethod): <span class="pull-right">@summary.ShippingCost.ToString("C")</span></p>
+                    <p>Tax: <span class="pull-right">@summary.TaxAmount.ToString("C")</span></p>
+                    <p><strong>Total: <span class="pull-right">@summary.Total.ToString("C")</span></strong></p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,72 @@
+/* Legacy eCommerce site styles (Bootstrap 3 theme companion). */
+
+body {
+    padding-top: 70px;
+    padding-bottom: 20px;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.hero-banner {
+    margin-top: 20px;
+}
+
+.product-card {
+    margin-bottom: 20px;
+}
+
+.product-card .thumbnail {
+    height: 380px;
+    overflow: hidden;
+}
+
+.product-thumb {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-name {
+    min-height: 44px;
+}
+
+.product-price {
+    font-size: 16px;
+}
+
+.product-thumbs {
+    margin-top: 15px;
+}
+
+.category-tile {
+    min-height: 150px;
+}
+
+.checkout-steps {
+    margin-bottom: 20px;
+}
+
+#mini-cart .btn-link {
+    color: #9d9d9d;
+}
+
+#mini-cart .btn-link:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.site-footer {
+    margin-top: 40px;
+    color: #777;
+}
+
+.field-validation-error {
+    color: #a94442;
+}
+
+.input-validation-error {
+    border-color: #a94442;
+}

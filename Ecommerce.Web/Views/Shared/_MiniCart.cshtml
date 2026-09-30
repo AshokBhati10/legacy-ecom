@@ -1,0 +1,6 @@
+@model Ecommerce.Core.ViewModels.MiniCartViewModel
+@* Header mini-cart fragment. Refreshed via AJAX after add-to-cart. *@
+<a href="@Url.Action("Index", "Cart")" class="btn btn-link navbar-btn" title="View cart">
+    <span class="glyphicon glyphicon-shopping-cart"></span>
+    Cart (@Model.ItemCount) - @Model.SubTotal.ToString("C")
+</a>

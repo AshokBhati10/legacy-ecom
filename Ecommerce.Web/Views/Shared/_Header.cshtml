@@ -1,0 +1,48 @@
+@* Site header: navbar, search, account links and the mini-cart. *@
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Legacy eCommerce", "Index", "Home", null, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Products", "Index", "Product")</li>
+            </ul>
+            @using (Html.BeginForm("Index", "Product", FormMethod.Get, new { @class = "navbar-form navbar-left", role = "search" }))
+            {
+                <div class="form-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search products..." value="@Request["q"]" />
+                </div>
+                <button type="submit" class="btn btn-default">Search</button>
+            }
+            <ul class="nav navbar-nav navbar-right">
+                <li id="mini-cart">@Html.Action("MiniCart", "Cart")</li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Hello, " + User.Identity.Name + "!", "Orders", "Account")</li>
+                    <li>@Html.ActionLink("My Orders", "Orders", "Account")</li>
+                    <li>
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-link navbar-btn">Log off</a>
+                        }
+                    </li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink("Register", "Register", "Account")</li>
+                    <li>@Html.ActionLink("Log in", "Login", "Account")</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+@* Anti-forgery token for AJAX POSTs (read by site.js). *@
+@Html.AntiForgeryToken()

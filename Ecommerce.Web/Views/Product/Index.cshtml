@@ -1,0 +1,39 @@
+@model Ecommerce.Core.ViewModels.ProductListViewModel
+@{
+    ViewBag.Title = "Products";
+}
+<h2>Products</h2>
+<div class="row">
+    <div class="col-md-3">
+        @Html.Partial("_Sidebar", Model.Categories)
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Filter</h4>
+            </div>
+            <div class="panel-body">
+                <form id="product-filter-form" method="get" action="@Url.Action("Filter", "Product")">
+                    <div class="form-group">
+                        <label for="filter-q">Search</label>
+                        <input type="text" id="filter-q" name="q" class="form-control" value="@Model.SearchQuery" placeholder="Keywords..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-category">Category</label>
+                        <select id="filter-category" name="categoryId" class="form-control">
+                            <option value="">All categories</option>
+                            @foreach (var c in Model.Categories)
+                            {
+                                <option value="@c.Id" @(Model.SelectedCategoryId == c.Id ? "selected" : "")>@c.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Apply filter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="product-list">
+            @Html.Partial("_ProductList", Model)
+        </div>
+    </div>
+</div>

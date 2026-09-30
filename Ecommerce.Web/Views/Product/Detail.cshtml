@@ -1,0 +1,88 @@
+@model Ecommerce.Core.ViewModels.ProductDetailViewModel
+@{
+    ViewBag.Title = Model.Product.Name;
+    var mainImage = Model.Images.FirstOrDefault(i => i.IsMain) ?? Model.Images.FirstOrDefault();
+}
+<h2>@Model.Product.Name</h2>
+<div class="row">
+    <div class="col-md-6">
+        @if (mainImage != null)
+        {
+            <a data-fancybox="gallery" href="@mainImage.Url" data-caption="@Model.Product.Name">
+                <img src="@mainImage.Url" alt="@(string.IsNullOrWhiteSpace(mainImage.AltText) ? Model.Product.Name : mainImage.AltText)" class="img-responsive img-thumbnail" />
+            </a>
+            if (Model.Images.Count > 1)
+            {
+                <div class="row product-thumbs">
+                    @foreach (var img in Model.Images)
+                    {
+                        <div class="col-xs-3">
+                            <a data-fancybox="gallery" href="@img.Url" data-caption="@Model.Product.Name">
+                                <img src="@img.Url" alt="@(string.IsNullOrWhiteSpace(img.AltText) ? Model.Product.Name : img.AltText)" class="img-responsive img-thumbnail" />
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <img src="@Url.Content("~/Content/images/no-image.png")" alt="@Model.Product.Name" class="img-responsive img-thumbnail" />
+        }
+    </div>
+    <div class="col-md-6">
+        <p class="text-muted">SKU: @Model.Product.Sku | Category: @Model.Product.Category.Name</p>
+        <h3 class="product-price">
+            @if (Model.Product.SalePrice.HasValue && Model.Product.SalePrice.Value > 0)
+            {
+                <span class="text-muted"><s>@Model.Product.Price.ToString("C")</s></span>
+                <span class="text-danger">@Model.Product.SalePrice.Value.ToString("C")</span>
+            }
+            else
+            {
+                @Model.Product.Price.ToString("C")
+            }
+        </h3>
+        <p>@Model.Product.ShortDescription</p>
+
+        @using (Ajax.BeginForm("Add", "Cart",
+            new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
+            new { @class = "form-inline", id = "detail-add-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("productId", Model.Product.Id)
+            if (Model.Variants.Count > 0)
+            {
+                <div class="form-group">
+                    <label for="variantId">Option</label>
+                    <select id="variantId" name="variantId" class="form-control">
+                        @foreach (var v in Model.Variants)
+                        {
+                            <option value="@v.Id">@v.Name (@v.PriceAdjustment.ToString("C"))</option>
+                        }
+                    </select>
+                </div>
+            }
+            <div class="form-group">
+                <label for="quantity">Qty</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" class="form-control" style="width:80px" />
+            </div>
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+        }
+
+        <h4>Description</h4>
+        <p>@Model.Product.Description</p>
+        <p class="text-muted">Availability: @(Model.Product.StockQuantity > 0 ? Model.Product.StockQuantity + " in stock" : "Out of stock")</p>
+    </div>
+</div>
+
+@if (Model.RelatedProducts.Count > 0)
+{
+    <h3>Related Products</h3>
+    <div class="row">
+        @foreach (var p in Model.RelatedProducts)
+        {
+            @Html.Partial("_ProductCard", p)
+        }
+    </div>
+}

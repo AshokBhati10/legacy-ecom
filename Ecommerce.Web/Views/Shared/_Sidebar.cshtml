@@ -1,0 +1,17 @@
+@model IList<Ecommerce.Core.Entities.Category>
+@* Category sidebar used on catalog pages. *@
+@{
+    int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Categories</h4>
+    </div>
+    <div class="list-group">
+        @Html.ActionLink("All Products", "Index", "Product", null, new { @class = "list-group-item" + (selectedCategoryId == null ? " active" : "") })
+        @foreach (var c in Model)
+        {
+            @Html.ActionLink(c.Name, "Index", "Product", new { categoryId = c.Id }, new { @class = "list-group-item" + (selectedCategoryId == c.Id ? " active" : "") })
+        }
+    </div>
+</div>
