@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ecommerce.Core.Entities;
 using Ecommerce.Core.Interfaces.Repositories;
 using Ecommerce.Core.Interfaces.Services;
@@ -28,8 +29,8 @@ namespace Ecommerce.Services
 
             var vm = new ProductListViewModel
             {
-                Products = items,
-                Categories = _categories.GetActive(),
+                Products = items.Select(ToCardViewModel).ToList(),
+                Categories = _categories.GetActive().Select(ToCategoryViewModel).ToList(),
                 SelectedCategoryId = categoryId,
                 SearchQuery = q,
                 Page = page,
@@ -49,15 +50,45 @@ namespace Ecommerce.Services
             return new ProductDetailViewModel
             {
                 Product = p,
-                Images = p.Images,
-                Variants = p.Variants,
-                RelatedProducts = _products.GetRelated(productId, 4)
+                Images = p.Images != null ? p.Images.ToList() : new List<ProductImage>(),
+                Variants = p.Variants != null ? p.Variants.ToList() : new List<ProductVariant>(),
+                RelatedProducts = _products.GetRelated(productId, 4).Select(ToCardViewModel).ToList()
             };
         }
 
-        public IList<Category> GetCategories()
+        public IList<CategoryViewModel> GetCategories()
         {
-            return _categories.GetActive();
+            return _categories.GetActive().Select(ToCategoryViewModel).ToList();
+        }
+
+        public IList<CategoryViewModel> GetCategoryTree(int? parentId)
+        {
+            return _categories.GetChildren(parentId).Select(ToCategoryViewModel).ToList();
+        }
+
+        private static CategoryViewModel ToCategoryViewModel(Category c)
+        {
+            return new CategoryViewModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Slug = c.Slug,
+                Description = c.Description,
+                HasChildren = c.ChildCategories != null && c.ChildCategories.Any(x => x.IsActive)
+            };
+        }
+
+        private static ProductCardViewModel ToCardViewModel(Product p)
+        {
+            return new ProductCardViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Slug = p.Slug,
+                Price = p.Price,
+                SalePrice = p.SalePrice,
+                ThumbnailUrl = p.ThumbnailUrl
+            };
         }
     }
 }

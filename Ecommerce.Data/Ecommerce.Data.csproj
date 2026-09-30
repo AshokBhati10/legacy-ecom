@@ -75,4 +75,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Added by the EntityFramework 6.4.4 NuGet package: wires the EntityDeploy
+       build action so the EDMX is split into csdl/ssdl/msl and embedded. -->
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

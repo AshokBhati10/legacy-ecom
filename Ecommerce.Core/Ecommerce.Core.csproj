@@ -64,6 +64,8 @@
     <Compile Include="Interfaces\Services\ICheckoutService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\ProductCardViewModel.cs" />
     <Compile Include="ViewModels\CheckoutAddressViewModel.cs" />
     <Compile Include="ViewModels\CheckoutPaymentViewModel.cs" />
     <Compile Include="ViewModels\CheckoutShippingViewModel.cs" />

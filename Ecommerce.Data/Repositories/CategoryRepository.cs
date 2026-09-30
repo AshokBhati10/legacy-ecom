@@ -35,5 +35,17 @@ namespace Ecommerce.Data.Repositories
 
             return items.Select(x => x.ToCore()).ToList();
         }
+
+        public IList<Category> GetChildren(int? parentId)
+        {
+            var items = _db.Categories
+                .Include(x => x.ChildCategories)
+                .Where(x => x.IsActive && x.ParentCategoryId == parentId)
+                .OrderBy(x => x.DisplayOrder)
+                .ThenBy(x => x.Name)
+                .ToList();
+
+            return items.Select(x => x.ToCore()).ToList();
+        }
     }
 }

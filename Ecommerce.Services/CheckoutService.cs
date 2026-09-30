@@ -106,7 +106,7 @@ namespace Ecommerce.Services
                     VariantId = l.VariantId,
                     ProductName = l.ProductName,
                     VariantName = l.VariantName,
-                    Sku = null,
+                    Sku = l.Sku,
                     UnitPrice = l.UnitPrice,
                     Quantity = l.Quantity,
                     LineTotal = l.LineTotal

@@ -7,5 +7,6 @@ namespace Ecommerce.Core.Interfaces.Repositories
     {
         Category GetById(int id);
         IList<Category> GetActive();
+        IList<Category> GetChildren(int? parentId);
     }
 }

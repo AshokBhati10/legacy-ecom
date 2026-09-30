@@ -5,8 +5,8 @@ namespace Ecommerce.Core.ViewModels
 {
     public class ProductListViewModel
     {
-        public IList<Product> Products { get; set; }
-        public IList<Category> Categories { get; set; }
+        public IList<ProductCardViewModel> Products { get; set; }
+        public IList<CategoryViewModel> Categories { get; set; }
         public int? SelectedCategoryId { get; set; }
         public string SearchQuery { get; set; }
         public int Page { get; set; }
@@ -16,8 +16,8 @@ namespace Ecommerce.Core.ViewModels
 
         public ProductListViewModel()
         {
-            Products = new List<Product>();
-            Categories = new List<Category>();
+            Products = new List<ProductCardViewModel>();
+            Categories = new List<CategoryViewModel>();
             Page = 1;
             PageSize = 12;
         }

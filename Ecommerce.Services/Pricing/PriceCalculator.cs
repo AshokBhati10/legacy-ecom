@@ -8,6 +8,12 @@ namespace Ecommerce.Services.Pricing
     /// <summary>
     /// Pricing calculation logic. Pure functions; no I/O, no HttpContext.
     /// </summary>
+    /// <remarks>
+    /// Demo pricing rules: the class specification does not prescribe shipping
+    /// rates, the free-shipping threshold, or the tax rate. These constants
+    /// stand in for values that would normally come from configuration or the
+    /// database; they are centralized here so they can be replaced in one place.
+    /// </remarks>
     public static class PriceCalculator
     {
         public const string StandardShippingCode = "Standard";

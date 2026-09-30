@@ -1,7 +1,7 @@
 @model Ecommerce.Core.ViewModels.ProductListViewModel
 @{
     ViewBag.Title = "Home";
-    var categories = ViewBag.Categories as IList<Ecommerce.Core.Entities.Category>;
+    var categories = ViewBag.Categories as IList<Ecommerce.Core.ViewModels.CategoryViewModel>;
 }
 <div class="jumbotron hero-banner">
     <h1>Welcome to Legacy eCommerce</h1>

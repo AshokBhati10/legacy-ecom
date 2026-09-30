@@ -738,9 +738,9 @@
   </edmx:Runtime>
   <edmx:Designer>
     <edmx:Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
     </edmx:Connection>
     <edmx:Options />
     <edmx:Diagrams>

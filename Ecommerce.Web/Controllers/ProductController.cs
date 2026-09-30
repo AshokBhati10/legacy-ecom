@@ -17,6 +17,7 @@ namespace Ecommerce.Web.Controllers
         public ActionResult Index(int? categoryId, string q, int page = 1)
         {
             var vm = _catalog.GetListing(categoryId, q, page, PageSize);
+            vm.Categories = _catalog.GetCategoryTree(null);
             ViewBag.SelectedCategoryId = vm.SelectedCategoryId;
             if (Request.IsAjaxRequest())
                 return PartialView("_ProductList", vm);
@@ -39,6 +40,17 @@ namespace Ecommerce.Web.Controllers
         {
             var vm = _catalog.GetListing(categoryId, q, page, PageSize);
             return PartialView("_ProductList", vm);
+        }
+
+        // GET: /Product/CategoryTree?parentId=1
+        // Returns one level of the nested category tree as an HTML fragment.
+        // Called by @Html.Action("CategoryTree", "Product") for the root level
+        // and by jQuery when the user expands a node (lazy loading).
+        [HttpGet]
+        public ActionResult CategoryTree(int? parentId)
+        {
+            var vm = _catalog.GetCategoryTree(parentId);
+            return PartialView("_CategoryTree", vm);
         }
     }
 }

@@ -129,12 +129,14 @@ namespace Ecommerce.Services
             if (product == null) return null;
 
             var variantName = (string)null;
+            var sku = product.Sku;
             var unitPrice = product.EffectivePrice;
             if (item.VariantId.HasValue)
             {
                 var variant = product.Variants.FirstOrDefault(v => v.Id == item.VariantId.Value);
                 if (variant == null) return null;
                 variantName = variant.Name;
+                sku = variant.Sku;
                 unitPrice += variant.PriceAdjustment;
             }
 
@@ -144,6 +146,7 @@ namespace Ecommerce.Services
                 VariantId = item.VariantId,
                 ProductName = product.Name,
                 VariantName = variantName,
+                Sku = sku,
                 ThumbnailUrl = product.ThumbnailUrl,
                 UnitPrice = unitPrice,
                 Quantity = item.Quantity,

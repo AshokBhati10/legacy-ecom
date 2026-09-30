@@ -9,6 +9,16 @@ var legacyEcom = legacyEcom || {};
 (function ($) {
     'use strict';
 
+    // Anti-forgery token on every AJAX request. [ValidateAntiForgeryToken]
+    // honours the RequestVerificationToken header for AJAX POSTs; the value
+    // is rendered once per page by @Html.AntiForgeryToken() in _Header.
+    var afToken = $('input[name="__RequestVerificationToken"]').first().val();
+    if (afToken) {
+        $.ajaxSetup({
+            headers: { 'RequestVerificationToken': afToken }
+        });
+    }
+
     // Refresh the header mini-cart fragment.
     function refreshMiniCart() {
         $('#mini-cart').load('/Cart/MiniCart');
@@ -61,6 +71,32 @@ var legacyEcom = legacyEcom || {};
         $('#product-list').on('click', '#product-pager a', function (e) {
             e.preventDefault();
             loadProducts($(this).attr('href'));
+        });
+
+        // Category tree: lazy-load child categories via AJAX.
+        $(document).on('click', '.cat-toggle', function (e) {
+            e.preventDefault();
+            var $toggle = $(this);
+            var id = $toggle.data('cat-id');
+            var $box = $('.cat-children[data-parent="' + id + '"]');
+            var $icon = $toggle.find('.glyphicon');
+            var expand = function () {
+                $box.slideDown(150);
+                $icon.removeClass('glyphicon-plus').addClass('glyphicon-minus');
+            };
+            if ($box.is(':visible')) {
+                $box.slideUp(150);
+                $icon.removeClass('glyphicon-minus').addClass('glyphicon-plus');
+                return;
+            }
+            if ($box.data('loaded')) {
+                expand();
+                return;
+            }
+            $.get('/Product/CategoryTree', { parentId: id }, function (html) {
+                $box.html(html).data('loaded', true);
+                expand();
+            });
         });
 
         // Fancybox 3 product gallery.

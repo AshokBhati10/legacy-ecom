@@ -1,17 +1,10 @@
-@model IList<Ecommerce.Core.Entities.Category>
-@* Category sidebar used on catalog pages. *@
-@{
-    int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
-}
+@* Category sidebar: nested tree, child levels lazy-loaded via jQuery AJAX. *@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">Categories</h4>
     </div>
-    <div class="list-group">
-        @Html.ActionLink("All Products", "Index", "Product", null, new { @class = "list-group-item" + (selectedCategoryId == null ? " active" : "") })
-        @foreach (var c in Model)
-        {
-            @Html.ActionLink(c.Name, "Index", "Product", new { categoryId = c.Id }, new { @class = "list-group-item" + (selectedCategoryId == c.Id ? " active" : "") })
-        }
+    <div class="panel-body category-sidebar">
+        <p>@Html.ActionLink("All Products", "Index", "Product")</p>
+        @Html.Action("CategoryTree", "Product", new { parentId = (int?)null })
     </div>
 </div>

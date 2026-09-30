@@ -13,10 +13,10 @@ using Unity.Mvc5;
 namespace Ecommerce.Web
 {
     /// <summary>
-    /// Unity DI composition root. DbContext, UnitOfWork, repositories and
-    /// services are registered with HierarchicalLifetimeManager so that the
-    /// Unity.Mvc5 RequestLifetimeHttpModule (auto-registered at startup)
-    /// scopes them to a per-request child container.
+    /// Unity DI composition root. Registrations use HierarchicalLifetimeManager:
+    /// Unity.Mvc5's UnityDependencyResolver creates a child container per HTTP
+    /// request (BeginScope), so this is the per-request lifetime in Unity 5.
+    /// (The older PerRequestLifetimeManager API no longer exists in Unity 5.x.)
     /// Controllers receive services through constructor injection only.
     /// </summary>
     public static class UnityConfig
@@ -25,7 +25,8 @@ namespace Ecommerce.Web
         {
             var container = new UnityContainer();
 
-            // Data boundary: one DbContext / UnitOfWork per HTTP request.
+            // Data boundary: one DbContext / UnitOfWork per HTTP request, via the
+            // per-request child container created by UnityDependencyResolver.
             container.RegisterType<EcommerceDbContext>(new HierarchicalLifetimeManager());
             container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager());
 

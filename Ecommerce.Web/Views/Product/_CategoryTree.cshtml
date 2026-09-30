@@ -1,0 +1,25 @@
+@model IList<Ecommerce.Core.ViewModels.CategoryViewModel>
+@* One level of the nested category tree. Nodes with children are expanded
+   lazily: jQuery GETs /Product/CategoryTree?parentId={id} and injects the
+   returned fragment into the matching .cat-children div. *@
+@{
+    int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
+}
+<ul class="nav nav-pills nav-stacked category-tree">
+    @foreach (var c in Model)
+    {
+        <li class="@(selectedCategoryId == c.Id ? "active" : "")">
+            <div class="cat-node">
+                @if (c.HasChildren)
+                {
+                    <a href="#" class="cat-toggle" data-cat-id="@c.Id" title="Show subcategories"><span class="glyphicon glyphicon-plus"></span></a>
+                }
+                @Html.ActionLink(c.Name, "Index", "Product", new { categoryId = c.Id }, null)
+            </div>
+            @if (c.HasChildren)
+            {
+                <div class="cat-children" data-parent="@c.Id" style="display: none; padding-left: 18px;"></div>
+            }
+        </li>
+    }
+</ul>

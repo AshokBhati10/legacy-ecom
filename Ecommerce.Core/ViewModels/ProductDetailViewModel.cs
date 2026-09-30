@@ -8,14 +8,14 @@ namespace Ecommerce.Core.ViewModels
         public Product Product { get; set; }
         public IList<ProductImage> Images { get; set; }
         public IList<ProductVariant> Variants { get; set; }
-        public IList<Product> RelatedProducts { get; set; }
+        public IList<ProductCardViewModel> RelatedProducts { get; set; }
         public int? SelectedVariantId { get; set; }
 
         public ProductDetailViewModel()
         {
             Images = new List<ProductImage>();
             Variants = new List<ProductVariant>();
-            RelatedProducts = new List<Product>();
+            RelatedProducts = new List<ProductCardViewModel>();
         }
     }
 }

@@ -26,8 +26,10 @@ namespace Ecommerce.Web.Controllers
             return View(_cart.GetCart(CartSession.GetItems()));
         }
 
-        // Header mini-cart fragment (child action + AJAX refresh).
-        [ChildActionOnly]
+        // Header mini-cart fragment. Served both as a child action from the
+        // layout (@Html.Action("MiniCart", "Cart")) and via direct AJAX GET
+        // from site.js ($('#mini-cart').load('/Cart/MiniCart')), so it must
+        // NOT be marked [ChildActionOnly].
         public ActionResult MiniCart()
         {
             return PartialView("_MiniCart", _cart.GetMiniCart(CartSession.GetItems()));
