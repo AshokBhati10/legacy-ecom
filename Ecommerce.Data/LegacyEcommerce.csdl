@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ns0:Schema xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:ns0="http://schemas.microsoft.com/ado/2009/11/edm" Namespace="Ecommerce.Data.Models" Alias="Self" annotation:UseStrongSpatialTypes="false">
+        <ns0:EntityContainer Name="LegacyEcommerceEntities" annotation:LazyLoadingEnabled="true">
+          <ns0:EntitySet Name="Addresses" EntityType="Ecommerce.Data.Models.Address" />
+          <ns0:EntitySet Name="CartItems" EntityType="Ecommerce.Data.Models.CartItem" />
+          <ns0:EntitySet Name="Categories" EntityType="Ecommerce.Data.Models.Category" />
+          <ns0:EntitySet Name="Customers" EntityType="Ecommerce.Data.Models.Customer" />
+          <ns0:EntitySet Name="OrderLines" EntityType="Ecommerce.Data.Models.OrderLine" />
+          <ns0:EntitySet Name="Orders" EntityType="Ecommerce.Data.Models.Order" />
+          <ns0:EntitySet Name="ProductImages" EntityType="Ecommerce.Data.Models.ProductImage" />
+          <ns0:EntitySet Name="ProductVariants" EntityType="Ecommerce.Data.Models.ProductVariant" />
+          <ns0:EntitySet Name="Products" EntityType="Ecommerce.Data.Models.Product" />
+          <ns0:AssociationSet Name="Category_ChildCategories" Association="Ecommerce.Data.Models.Category_ChildCategories">
+            <ns0:End Role="ParentCategory" EntitySet="Categories" />
+            <ns0:End Role="ChildCategories" EntitySet="Categories" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Category_Products" Association="Ecommerce.Data.Models.Category_Products">
+            <ns0:End Role="Category" EntitySet="Categories" />
+            <ns0:End Role="Products" EntitySet="Products" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Customer_Addresses" Association="Ecommerce.Data.Models.Customer_Addresses">
+            <ns0:End Role="Customer" EntitySet="Customers" />
+            <ns0:End Role="Addresses" EntitySet="Addresses" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Customer_Orders" Association="Ecommerce.Data.Models.Customer_Orders">
+            <ns0:End Role="Customer" EntitySet="Customers" />
+            <ns0:End Role="Orders" EntitySet="Orders" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Order_OrderLines" Association="Ecommerce.Data.Models.Order_OrderLines">
+            <ns0:End Role="Order" EntitySet="Orders" />
+            <ns0:End Role="OrderLines" EntitySet="OrderLines" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Product_OrderLines" Association="Ecommerce.Data.Models.Product_OrderLines">
+            <ns0:End Role="Product" EntitySet="Products" />
+            <ns0:End Role="OrderLines" EntitySet="OrderLines" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Product_ProductImages" Association="Ecommerce.Data.Models.Product_ProductImages">
+            <ns0:End Role="Product" EntitySet="Products" />
+            <ns0:End Role="Images" EntitySet="ProductImages" />
+          </ns0:AssociationSet>
+          <ns0:AssociationSet Name="Product_ProductVariants" Association="Ecommerce.Data.Models.Product_ProductVariants">
+            <ns0:End Role="Product" EntitySet="Products" />
+            <ns0:End Role="Variants" EntitySet="ProductVariants" />
+          </ns0:AssociationSet>
+        </ns0:EntityContainer>
+        <ns0:EntityType Name="Address">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="Label" Type="String" MaxLength="50" />
+          <ns0:Property Name="FirstName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="LastName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="Street" Type="String" MaxLength="250" Nullable="false" />
+          <ns0:Property Name="City" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="State" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="PostalCode" Type="String" MaxLength="20" Nullable="false" />
+          <ns0:Property Name="Country" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="Phone" Type="String" MaxLength="30" />
+          <ns0:Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <ns0:NavigationProperty Name="Customer" Relationship="Ecommerce.Data.Models.Customer_Addresses" FromRole="Addresses" ToRole="Customer" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="CartItem">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="UserId" Type="String" MaxLength="128" Nullable="false" />
+          <ns0:Property Name="ProductId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="VariantId" Type="Int32" />
+          <ns0:Property Name="Quantity" Type="Int32" Nullable="false" />
+          <ns0:Property Name="DateCreated" Type="DateTime" Nullable="false" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="Category">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="Slug" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="Description" Type="String" MaxLength="Max" />
+          <ns0:Property Name="ParentCategoryId" Type="Int32" />
+          <ns0:Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <ns0:Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <ns0:NavigationProperty Name="Products" Relationship="Ecommerce.Data.Models.Category_Products" FromRole="Category" ToRole="Products" />
+          <ns0:NavigationProperty Name="ChildCategories" Relationship="Ecommerce.Data.Models.Category_ChildCategories" FromRole="ParentCategory" ToRole="ChildCategories" />
+          <ns0:NavigationProperty Name="ParentCategory" Relationship="Ecommerce.Data.Models.Category_ChildCategories" FromRole="ChildCategories" ToRole="ParentCategory" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="Customer">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="UserId" Type="String" MaxLength="128" />
+          <ns0:Property Name="FirstName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="LastName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="Email" Type="String" MaxLength="256" Nullable="false" />
+          <ns0:Property Name="Phone" Type="String" MaxLength="30" />
+          <ns0:Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <ns0:NavigationProperty Name="Orders" Relationship="Ecommerce.Data.Models.Customer_Orders" FromRole="Customer" ToRole="Orders" />
+          <ns0:NavigationProperty Name="Addresses" Relationship="Ecommerce.Data.Models.Customer_Addresses" FromRole="Customer" ToRole="Addresses" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="Order">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="OrderNumber" Type="String" MaxLength="50" Nullable="false" />
+          <ns0:Property Name="CustomerId" Type="Int32" />
+          <ns0:Property Name="UserId" Type="String" MaxLength="128" />
+          <ns0:Property Name="OrderDate" Type="DateTime" Nullable="false" />
+          <ns0:Property Name="Status" Type="String" MaxLength="50" Nullable="false" />
+          <ns0:Property Name="SubTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="TaxAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="ShippingMethod" Type="String" MaxLength="50" Nullable="false" />
+          <ns0:Property Name="PaymentMethod" Type="String" MaxLength="50" Nullable="false" />
+          <ns0:Property Name="ShipFirstName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="ShipLastName" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="ShipEmail" Type="String" MaxLength="256" Nullable="false" />
+          <ns0:Property Name="ShipPhone" Type="String" MaxLength="30" />
+          <ns0:Property Name="ShipStreet" Type="String" MaxLength="250" Nullable="false" />
+          <ns0:Property Name="ShipCity" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="ShipState" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:Property Name="ShipPostalCode" Type="String" MaxLength="20" Nullable="false" />
+          <ns0:Property Name="ShipCountry" Type="String" MaxLength="100" Nullable="false" />
+          <ns0:NavigationProperty Name="Customer" Relationship="Ecommerce.Data.Models.Customer_Orders" FromRole="Orders" ToRole="Customer" />
+          <ns0:NavigationProperty Name="OrderLines" Relationship="Ecommerce.Data.Models.Order_OrderLines" FromRole="Order" ToRole="OrderLines" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="OrderLine">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="OrderId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="ProductId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="VariantId" Type="Int32" />
+          <ns0:Property Name="ProductName" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="VariantName" Type="String" MaxLength="200" />
+          <ns0:Property Name="Sku" Type="String" MaxLength="50" />
+          <ns0:Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="Quantity" Type="Int32" Nullable="false" />
+          <ns0:Property Name="LineTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:NavigationProperty Name="Order" Relationship="Ecommerce.Data.Models.Order_OrderLines" FromRole="OrderLines" ToRole="Order" />
+          <ns0:NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_OrderLines" FromRole="OrderLines" ToRole="Product" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="Product">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="Sku" Type="String" MaxLength="50" Nullable="false" />
+          <ns0:Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="Slug" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="ShortDescription" Type="String" MaxLength="500" />
+          <ns0:Property Name="Description" Type="String" MaxLength="Max" />
+          <ns0:Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="SalePrice" Type="Decimal" Precision="18" Scale="2" />
+          <ns0:Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="ThumbnailUrl" Type="String" MaxLength="500" />
+          <ns0:Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <ns0:Property Name="IsFeatured" Type="Boolean" Nullable="false" />
+          <ns0:Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <ns0:Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <ns0:NavigationProperty Name="Category" Relationship="Ecommerce.Data.Models.Category_Products" FromRole="Products" ToRole="Category" />
+          <ns0:NavigationProperty Name="Images" Relationship="Ecommerce.Data.Models.Product_ProductImages" FromRole="Product" ToRole="Images" />
+          <ns0:NavigationProperty Name="Variants" Relationship="Ecommerce.Data.Models.Product_ProductVariants" FromRole="Product" ToRole="Variants" />
+          <ns0:NavigationProperty Name="OrderLines" Relationship="Ecommerce.Data.Models.Product_OrderLines" FromRole="Product" ToRole="OrderLines" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="ProductImage">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="ProductId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="Url" Type="String" MaxLength="500" Nullable="false" />
+          <ns0:Property Name="AltText" Type="String" MaxLength="200" />
+          <ns0:Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+          <ns0:Property Name="IsMain" Type="Boolean" Nullable="false" />
+          <ns0:NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_ProductImages" FromRole="Images" ToRole="Product" />
+        </ns0:EntityType>
+        <ns0:EntityType Name="ProductVariant">
+          <ns0:Key>
+            <ns0:PropertyRef Name="Id" />
+          </ns0:Key>
+          <ns0:Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <ns0:Property Name="ProductId" Type="Int32" Nullable="false" />
+          <ns0:Property Name="Name" Type="String" MaxLength="200" Nullable="false" />
+          <ns0:Property Name="Sku" Type="String" MaxLength="50" />
+          <ns0:Property Name="PriceAdjustment" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <ns0:Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <ns0:Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <ns0:NavigationProperty Name="Product" Relationship="Ecommerce.Data.Models.Product_ProductVariants" FromRole="Variants" ToRole="Product" />
+        </ns0:EntityType>
+        <ns0:Association Name="Category_ChildCategories">
+          <ns0:End Role="ParentCategory" Type="Ecommerce.Data.Models.Category" Multiplicity="0..1" />
+          <ns0:End Role="ChildCategories" Type="Ecommerce.Data.Models.Category" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="ParentCategory">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="ChildCategories">
+              <ns0:PropertyRef Name="ParentCategoryId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Category_Products">
+          <ns0:End Role="Category" Type="Ecommerce.Data.Models.Category" Multiplicity="1" />
+          <ns0:End Role="Products" Type="Ecommerce.Data.Models.Product" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Category">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="Products">
+              <ns0:PropertyRef Name="CategoryId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Customer_Addresses">
+          <ns0:End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="1" />
+          <ns0:End Role="Addresses" Type="Ecommerce.Data.Models.Address" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Customer">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="Addresses">
+              <ns0:PropertyRef Name="CustomerId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Customer_Orders">
+          <ns0:End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="0..1" />
+          <ns0:End Role="Orders" Type="Ecommerce.Data.Models.Order" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Customer">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="Orders">
+              <ns0:PropertyRef Name="CustomerId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Order_OrderLines">
+          <ns0:End Role="Order" Type="Ecommerce.Data.Models.Order" Multiplicity="1" />
+          <ns0:End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Order">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="OrderLines">
+              <ns0:PropertyRef Name="OrderId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Product_OrderLines">
+          <ns0:End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <ns0:End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Product">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="OrderLines">
+              <ns0:PropertyRef Name="ProductId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Product_ProductImages">
+          <ns0:End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <ns0:End Role="Images" Type="Ecommerce.Data.Models.ProductImage" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Product">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="Images">
+              <ns0:PropertyRef Name="ProductId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+        <ns0:Association Name="Product_ProductVariants">
+          <ns0:End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
+          <ns0:End Role="Variants" Type="Ecommerce.Data.Models.ProductVariant" Multiplicity="*" />
+        <ns0:ReferentialConstraint>
+            <ns0:Principal Role="Product">
+              <ns0:PropertyRef Name="Id" />
+            </ns0:Principal>
+            <ns0:Dependent Role="Variants">
+              <ns0:PropertyRef Name="ProductId" />
+            </ns0:Dependent>
+          </ns0:ReferentialConstraint>
+        </ns0:Association>
+      </ns0:Schema>
+    

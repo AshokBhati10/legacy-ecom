@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ns0:Mapping xmlns:ns0="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <ns0:EntityContainerMapping StorageEntityContainer="LegacyEcommerceModelStoreContainer" CdmEntityContainer="LegacyEcommerceEntities">
+          <ns0:EntitySetMapping Name="Addresses">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.Address">
+              <ns0:MappingFragment StoreEntitySet="Addresses">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ns0:ScalarProperty Name="Label" ColumnName="Label" />
+                <ns0:ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ns0:ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ns0:ScalarProperty Name="Street" ColumnName="Street" />
+                <ns0:ScalarProperty Name="City" ColumnName="City" />
+                <ns0:ScalarProperty Name="State" ColumnName="State" />
+                <ns0:ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ns0:ScalarProperty Name="Country" ColumnName="Country" />
+                <ns0:ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ns0:ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="CartItems">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.CartItem">
+              <ns0:MappingFragment StoreEntitySet="CartItems">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ns0:ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ns0:ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ns0:ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ns0:ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="Categories">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.Category">
+              <ns0:MappingFragment StoreEntitySet="Categories">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="Name" ColumnName="Name" />
+                <ns0:ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ns0:ScalarProperty Name="Description" ColumnName="Description" />
+                <ns0:ScalarProperty Name="ParentCategoryId" ColumnName="ParentCategoryId" />
+                <ns0:ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ns0:ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="Customers">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.Customer">
+              <ns0:MappingFragment StoreEntitySet="Customers">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ns0:ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ns0:ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ns0:ScalarProperty Name="Email" ColumnName="Email" />
+                <ns0:ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ns0:ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="OrderLines">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.OrderLine">
+              <ns0:MappingFragment StoreEntitySet="OrderLines">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ns0:ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ns0:ScalarProperty Name="VariantId" ColumnName="VariantId" />
+                <ns0:ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ns0:ScalarProperty Name="VariantName" ColumnName="VariantName" />
+                <ns0:ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ns0:ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ns0:ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ns0:ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="Orders">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.Order">
+              <ns0:MappingFragment StoreEntitySet="Orders">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ns0:ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ns0:ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ns0:ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ns0:ScalarProperty Name="Status" ColumnName="Status" />
+                <ns0:ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ns0:ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
+                <ns0:ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+                <ns0:ScalarProperty Name="Total" ColumnName="Total" />
+                <ns0:ScalarProperty Name="ShippingMethod" ColumnName="ShippingMethod" />
+                <ns0:ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ns0:ScalarProperty Name="ShipFirstName" ColumnName="ShipFirstName" />
+                <ns0:ScalarProperty Name="ShipLastName" ColumnName="ShipLastName" />
+                <ns0:ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
+                <ns0:ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ns0:ScalarProperty Name="ShipStreet" ColumnName="ShipStreet" />
+                <ns0:ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ns0:ScalarProperty Name="ShipState" ColumnName="ShipState" />
+                <ns0:ScalarProperty Name="ShipPostalCode" ColumnName="ShipPostalCode" />
+                <ns0:ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="ProductImages">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.ProductImage">
+              <ns0:MappingFragment StoreEntitySet="ProductImages">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ns0:ScalarProperty Name="Url" ColumnName="Url" />
+                <ns0:ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ns0:ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ns0:ScalarProperty Name="IsMain" ColumnName="IsMain" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="ProductVariants">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.ProductVariant">
+              <ns0:MappingFragment StoreEntitySet="ProductVariants">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ns0:ScalarProperty Name="Name" ColumnName="Name" />
+                <ns0:ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ns0:ScalarProperty Name="PriceAdjustment" ColumnName="PriceAdjustment" />
+                <ns0:ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ns0:ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>
+          <ns0:EntitySetMapping Name="Products">
+            <ns0:EntityTypeMapping TypeName="Ecommerce.Data.Models.Product">
+              <ns0:MappingFragment StoreEntitySet="Products">
+                <ns0:ScalarProperty Name="Id" ColumnName="Id" />
+                <ns0:ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ns0:ScalarProperty Name="Name" ColumnName="Name" />
+                <ns0:ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ns0:ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ns0:ScalarProperty Name="Description" ColumnName="Description" />
+                <ns0:ScalarProperty Name="Price" ColumnName="Price" />
+                <ns0:ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ns0:ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ns0:ScalarProperty Name="ThumbnailUrl" ColumnName="ThumbnailUrl" />
+                <ns0:ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ns0:ScalarProperty Name="IsFeatured" ColumnName="IsFeatured" />
+                <ns0:ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ns0:ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </ns0:MappingFragment>
+            </ns0:EntityTypeMapping>
+          </ns0:EntitySetMapping>        </ns0:EntityContainerMapping>
+      </ns0:Mapping>
+    

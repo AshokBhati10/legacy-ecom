@@ -68,6 +68,33 @@
          conceptual model; EntityDeploy embeds the mapping at build. -->
     <EntityDeploy Include="LegacyEcommerce.edmx" />
   </ItemGroup>
+  <!-- Mono/xbuild cannot execute the EntityDeploy MSBuild task: EF 6.4.4's
+       Microsoft.Data.Entity.Build.Tasks.dll is built against MSBuild 15.1
+       (Microsoft.Build.Utilities.Core 15.1.0.0), and xbuild 14 silently drops
+       the task's [Output] items (ITaskItem type-identity mismatch), so no
+       csdl/ssdl/msl resources get embedded and EF throws MetadataException
+       ("Unable to load the specified metadata resource") at runtime.
+       On Unix-like hosts, embed the pre-generated artifacts instead. The
+       LogicalName values match exactly what EntityDeploySetLogicalNames
+       produces on Windows (substring after edmxResourcesToEmbed\ with
+       separators converted to dots), so the res://*/LegacyEcommerce.*
+       metadata paths in Web.config resolve unchanged on both platforms.
+       Windows/Visual Studio builds are unaffected: '$(OS)' is Windows_NT
+       there, so this group is skipped and EntityDeploy runs as before.
+       If LegacyEcommerce.edmx is edited, regenerate these three files from
+       its ConceptualModels/StorageModels/Mappings sections (e.g. copy them
+       from obj\<Configuration>\edmxResourcesToEmbed\ after a Windows build). -->
+  <ItemGroup Condition="'$(OS)' == 'Unix'">
+    <EmbeddedResource Include="LegacyEcommerce.csdl">
+      <LogicalName>LegacyEcommerce.csdl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LegacyEcommerce.msl">
+      <LogicalName>LegacyEcommerce.msl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LegacyEcommerce.ssdl">
+      <LogicalName>LegacyEcommerce.ssdl</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Core\Ecommerce.Core.csproj">
       <Project>{8B9E5919-9C79-4E24-BE7D-8CED6AD7DF24}</Project>
