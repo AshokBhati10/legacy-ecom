@@ -45,7 +45,7 @@
         </h3>
         <p>@Model.Product.ShortDescription</p>
 
-        @using (Ajax.BeginForm("Add", "Cart",
+        @using (Ajax.BeginForm("Add", "Cart", null,
             new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
             new { @class = "form-inline", id = "detail-add-form" }))
         {

@@ -490,34 +490,98 @@
         <Association Name="Category_ChildCategories">
           <End Role="ParentCategory" Type="Ecommerce.Data.Models.Category" Multiplicity="0..1" />
           <End Role="ChildCategories" Type="Ecommerce.Data.Models.Category" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="ParentCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ChildCategories">
+              <PropertyRef Name="ParentCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Category_Products">
           <End Role="Category" Type="Ecommerce.Data.Models.Category" Multiplicity="1" />
           <End Role="Products" Type="Ecommerce.Data.Models.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Customer_Addresses">
           <End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="1" />
           <End Role="Addresses" Type="Ecommerce.Data.Models.Address" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Addresses">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Customer_Orders">
-          <End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="1" />
+          <End Role="Customer" Type="Ecommerce.Data.Models.Customer" Multiplicity="0..1" />
           <End Role="Orders" Type="Ecommerce.Data.Models.Order" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Order_OrderLines">
           <End Role="Order" Type="Ecommerce.Data.Models.Order" Multiplicity="1" />
           <End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Product_OrderLines">
           <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
           <End Role="OrderLines" Type="Ecommerce.Data.Models.OrderLine" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Product_ProductImages">
           <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
           <End Role="Images" Type="Ecommerce.Data.Models.ProductImage" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="Product_ProductVariants">
           <End Role="Product" Type="Ecommerce.Data.Models.Product" Multiplicity="1" />
           <End Role="Variants" Type="Ecommerce.Data.Models.ProductVariant" Multiplicity="*" />
+        <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Variants">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -667,72 +731,7 @@
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="Category_ChildCategories" TypeName="Ecommerce.Data.Models.Category_ChildCategories" StoreEntitySet="Categories">
-            <EndProperty Name="ParentCategory">
-              <ScalarProperty Name="Id" ColumnName="ParentCategoryId" />
-            </EndProperty>
-            <EndProperty Name="ChildCategories">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Category_Products" TypeName="Ecommerce.Data.Models.Category_Products" StoreEntitySet="Products">
-            <EndProperty Name="Category">
-              <ScalarProperty Name="Id" ColumnName="CategoryId" />
-            </EndProperty>
-            <EndProperty Name="Products">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Customer_Addresses" TypeName="Ecommerce.Data.Models.Customer_Addresses" StoreEntitySet="Addresses">
-            <EndProperty Name="Customer">
-              <ScalarProperty Name="Id" ColumnName="CustomerId" />
-            </EndProperty>
-            <EndProperty Name="Addresses">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Customer_Orders" TypeName="Ecommerce.Data.Models.Customer_Orders" StoreEntitySet="Orders">
-            <EndProperty Name="Customer">
-              <ScalarProperty Name="Id" ColumnName="CustomerId" />
-            </EndProperty>
-            <EndProperty Name="Orders">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Order_OrderLines" TypeName="Ecommerce.Data.Models.Order_OrderLines" StoreEntitySet="OrderLines">
-            <EndProperty Name="Order">
-              <ScalarProperty Name="Id" ColumnName="OrderId" />
-            </EndProperty>
-            <EndProperty Name="OrderLines">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Product_OrderLines" TypeName="Ecommerce.Data.Models.Product_OrderLines" StoreEntitySet="OrderLines">
-            <EndProperty Name="Product">
-              <ScalarProperty Name="Id" ColumnName="ProductId" />
-            </EndProperty>
-            <EndProperty Name="OrderLines">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Product_ProductImages" TypeName="Ecommerce.Data.Models.Product_ProductImages" StoreEntitySet="ProductImages">
-            <EndProperty Name="Product">
-              <ScalarProperty Name="Id" ColumnName="ProductId" />
-            </EndProperty>
-            <EndProperty Name="Images">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Product_ProductVariants" TypeName="Ecommerce.Data.Models.Product_ProductVariants" StoreEntitySet="ProductVariants">
-            <EndProperty Name="Product">
-              <ScalarProperty Name="Id" ColumnName="ProductId" />
-            </EndProperty>
-            <EndProperty Name="Variants">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-        </EntityContainerMapping>
+          </EntitySetMapping>        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
