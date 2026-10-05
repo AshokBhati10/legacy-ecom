@@ -1,38 +1,15 @@
-# 02 — HTTP Request and MVC Flow
+# 02 — Request and MVC Flow
 
-How a request enters the app, reaches a controller, and becomes HTML.
-
----
-
-### Byte 1: Application startup runs once, in a fixed order
-
-**Builds on:** None — starting point (see `01` for the layer map)
-
-**In plain terms:**
-When the app starts, `Global.asax.cs` runs five registrations in order: areas, global filters, routes, bundles, and finally the Unity DI container. Everything the app needs to serve requests is wired here, once.
-
-**The code:**
-```csharp
-protected void Application_Start()
-{
-    AreaRegistration.RegisterAllAreas();
-    FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-    RouteConfig.RegisterRoutes(RouteTable.Routes);
-    BundleConfig.RegisterBundles(BundleTable.Bundles);
-    UnityConfig.RegisterComponents();   // DI container — must be last
-}
-```
-
-Unity is registered last so that every other subsystem is already configured before the container starts resolving controllers. If you add a new global filter or route, this is where it gets registered.
+What happens between typing a URL and seeing a page.
 
 ---
 
-### Byte 2: One default route handles every URL
+### Byte 1: A URL becomes a controller action
 
-**Builds on:** Byte 1
+**Builds on:** `01`, Byte 1
 
 **In plain terms:**
-There is a single route template: `{controller}/{action}/{id}`. `/Product/Detail/1` maps to `ProductController.Detail(1)`; `/` falls back to `HomeController.Index` via defaults. No attribute routing, no areas in use.
+You open `/Product/Detail/1`. One route rule — `{controller}/{action}/{id}` — turns that into "call `Detail(1)` on `ProductController`". `/` opens `HomeController.Index` by default.
 
 **The code:**
 ```csharp
@@ -43,87 +20,48 @@ routes.MapRoute(
 );
 ```
 
-The controllers in the project are `Home`, `Product`, `Cart`, `Checkout`, and `Account` — every URL in the app is one of those five controllers plus an action name. When tracing a request, start from the URL and find the matching controller action.
+Every page in this app is one of five controllers (Home, Product, Cart, Checkout, Account) plus an action name. To trace any page, start from its URL.
 
 ---
 
-### Byte 3: Controllers are thin and constructor-injected
+### Byte 2: The controller asks, never fetches
 
-**Builds on:** Byte 2 (see `01`, Byte 2 for why interfaces are used)
+**Builds on:** Byte 1
 
 **In plain terms:**
-Controllers do three things: accept input, call a service, return a view. They never query the database or compute prices. Their dependencies arrive through the constructor, supplied by Unity.
+The controller's job is tiny: take the input, ask a service for the data, hand the result to a view. It never queries the database or calculates anything.
 
 **The code:**
 ```csharp
-public class HomeController : Controller
+public ActionResult Detail(int id)
 {
-    private readonly ICatalogService _catalog;
-
-    public HomeController(ICatalogService catalog)   // Unity injects this
-    {
-        _catalog = catalog;
-    }
-
-    public ActionResult Index()
-    {
-        ViewBag.Categories = _catalog.GetCategories();
-        var listing = _catalog.GetListing(null, null, 1, 8);
-        return View(listing);
-    }
+    var vm = _catalog.GetDetail(id);   // the service does the work
+    if (vm == null)
+        return HttpNotFound();
+    return View(vm);                    // the view only renders
 }
 ```
 
-Because controllers only depend on interfaces, the request flow is always *Controller → Service → Repository*. If an action is doing more than input/output shaping, that logic belongs in the service.
+If a page shows wrong data, the bug is almost never in the controller — look at the service or below it.
 
 ---
 
-### Byte 4: Views render ViewModels; partials render fragments
+### Byte 3: Views render view models
 
-**Builds on:** Byte 3
-
-**In plain terms:**
-Each view receives one ViewModel and renders HTML from it — no data access in Razor. Reusable fragments (mini-cart, product card, category tree) are partial views, some served both as child actions and as standalone AJAX endpoints.
-
-**The code:**
-```csharp
-// CartController.MiniCart — deliberately NOT [ChildActionOnly]:
-// the layout calls @Html.Action("MiniCart", "Cart"), and site.js
-// also GETs /Cart/MiniCart directly after AJAX add-to-cart.
-public ActionResult MiniCart()
-{
-    return PartialView("_MiniCart", _cart.GetMiniCart(CartSession.GetItems()));
-}
-```
-
-That comment in the real code is load-bearing: marking `MiniCart` as `[ChildActionOnly]` would break the AJAX refresh. When you see a partial, check whether it's also an AJAX endpoint before restricting it.
-
----
-
-### Byte 5: The cart lives in Session, owned by the Web layer
-
-**Builds on:** Byte 3
+**Builds on:** Byte 2
 
 **In plain terms:**
-The shopping cart is stored in `HttpContext.Session` (InProc, 25-minute timeout per Web.config), managed by a small `SessionCartHelper` in the Web project. Services receive a plain `IEnumerable<CartItem>` and never touch `HttpContext` — a deliberate seam.
+The `vm` above is a *view model* — a simple object shaped exactly for one page (product + its images + related products). The Razor view just turns it into HTML. No database calls in views, ever.
 
 **The code:**
-```csharp
-private SessionCartHelper CartSession
-{
-    get { return new SessionCartHelper(HttpContext); }
-}
-
-public ActionResult Index()
-{
-    return View(_cart.GetCart(CartSession.GetItems()));  // Web reads session, service does math
-}
+```text
+Controller → returns View(vm) → Razor view renders vm → HTML → your browser
 ```
 
-This keeps the service layer web-ignorant and unit-testable: `CartService` works on lists, not on sessions. For logged-in users the controller also persists the cart to the database (`CartItems` table) so it survives session expiry — see `PersistForUser()` in `CartController`.
+View models are the contract between the service layer and the UI. If the page needs new data, the service adds it to the view model — the view just displays what it is given.
 
 ---
 
 ## PUTTING IT TOGETHER
 
-IIS/XSP receives a URL → the default route picks a controller and action → Unity constructs the controller with its service dependencies → the action pulls input (route values, form posts, session cart) and calls services → services return ViewModels → the Razor view renders them into HTML. Cross-cutting state like the cart is staged in Session by Web-layer helpers, never inside business logic.
+URL → route → controller action → service call → view model → Razor view → HTML. The controller is a receptionist: it takes your request, passes it to the service, and hands the answer to the view. Business logic lives one layer down, in Services.
