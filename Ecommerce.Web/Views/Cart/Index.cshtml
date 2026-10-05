@@ -2,76 +2,80 @@
 @{
     ViewBag.Title = "Shopping Cart";
 }
-<h2>Shopping Cart</h2>
-@if (Model.IsEmpty)
-{
-    <div class="alert alert-info">
-        Your cart is empty. @Html.ActionLink("Continue shopping", "Index", "Product").
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">@Html.ActionLink("Home", "Index", "Home") &rsaquo; Cart</div>
+        <h1>Shopping Cart</h1>
+        @if (!Model.IsEmpty)
+        {
+            <p>@Model.ItemCount item(s) in your cart</p>
+        }
     </div>
-}
-else
-{
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Unit Price</th>
-                <th>Quantity</th>
-                <th>Line Total</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink(item.ProductName, "Detail", "Product", new { id = item.ProductId }, null)
-                        @if (!string.IsNullOrWhiteSpace(item.VariantName))
-                        { <br /><small class="text-muted">@item.VariantName</small> }
-                    </td>
-                    <td>@item.UnitPrice.ToString("C")</td>
-                    <td>
-                        @using (Html.BeginForm("Update", "Cart", FormMethod.Post, new { @class = "form-inline" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("productId", item.ProductId)
-                            @Html.Hidden("variantId", item.VariantId)
-                            <input type="number" name="quantity" value="@item.Quantity" min="0" max="99" class="form-control input-sm" style="width:70px" />
-                            <button type="submit" class="btn btn-default btn-sm">Update</button>
-                        }
-                    </td>
-                    <td>@item.LineTotal.ToString("C")</td>
-                    <td>
-                        @using (Html.BeginForm("Remove", "Cart", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("productId", item.ProductId)
-                            @Html.Hidden("variantId", item.VariantId)
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-right"><strong>Subtotal (@Model.ItemCount item(s)):</strong></td>
-                <td colspan="2"><strong>@Model.SubTotal.ToString("C")</strong></td>
-            </tr>
-        </tfoot>
-    </table>
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm("Clear", "Cart", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-warning">Clear Cart</button>
-            }
+
+    @if (Model.IsEmpty)
+    {
+        <div class="sc-empty">
+            <h3>Your cart is empty</h3>
+            <p>Looks like you haven't added anything yet. Let's fix that.</p>
+            @Html.ActionLink("Start shopping", "Index", "Product", null, new { @class = "sc-btn sc-btn-primary" })
         </div>
-        <div class="col-md-6 text-right">
-            @Html.ActionLink("Continue Shopping", "Index", "Product", null, new { @class = "btn btn-default" })
-            @Html.ActionLink("Proceed to Checkout", "Address", "Checkout", null, new { @class = "btn btn-success" })
+    }
+    else
+    {
+        <div class="sc-cart-layout">
+            <div>
+                @foreach (var item in Model.Items)
+                {
+                    <div class="sc-cart-item">
+                        <a href="@Url.Action("Detail", "Product", new { id = item.ProductId })">
+                            <img src="@(string.IsNullOrWhiteSpace(item.ThumbnailUrl) ? Url.Content("~/Content/images/no-image.png") : item.ThumbnailUrl)" alt="@item.ProductName" loading="lazy" />
+                        </a>
+                        <div>
+                            <h3>@Html.ActionLink(item.ProductName, "Detail", "Product", new { id = item.ProductId }, null)</h3>
+                            @if (!string.IsNullOrWhiteSpace(item.VariantName))
+                            {
+                                <div class="sc-variant">@item.VariantName</div>
+                            }
+                            <div class="sc-unit">@item.UnitPrice.ToString("C") each &middot; SKU @item.Sku</div>
+                            @using (Html.BeginForm("Remove", "Cart", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("productId", item.ProductId)
+                                @Html.Hidden("variantId", item.VariantId)
+                                <button type="submit" class="sc-link-btn">Remove</button>
+                            }
+                        </div>
+                        <div class="sc-cart-right">
+                            @using (Html.BeginForm("Update", "Cart", FormMethod.Post, new { @class = "sc-cart-qty-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("productId", item.ProductId)
+                                @Html.Hidden("variantId", item.VariantId)
+                                <span class="sc-qty">
+                                    <input type="number" name="quantity" value="@item.Quantity" min="0" max="99" aria-label="Quantity" style="width:56px" />
+                                </span>
+                                <button type="submit" class="sc-btn sc-btn-ghost sc-btn-sm">Update</button>
+                            }
+                            <div class="sc-cart-line-total">@item.LineTotal.ToString("C")</div>
+                        </div>
+                    </div>
+                }
+                <div class="sc-cart-actions">
+                    @using (Html.BeginForm("Clear", "Cart", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="sc-link-btn">Clear cart</button>
+                    }
+                    @Html.ActionLink("Continue shopping", "Index", "Product", null, new { @class = "sc-btn sc-btn-ghost" })
+                </div>
+            </div>
+            <aside class="sc-summary">
+                <h3>Order summary</h3>
+                <div class="sc-summary-row"><span>Items (@Model.ItemCount)</span><span>@Model.SubTotal.ToString("C")</span></div>
+                <div class="sc-summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+                <div class="sc-summary-row total"><span>Subtotal</span><span>@Model.SubTotal.ToString("C")</span></div>
+                @Html.ActionLink("Proceed to Checkout", "Address", "Checkout", null, new { @class = "sc-btn sc-btn-primary sc-btn-block sc-btn-lg", style = "margin-top:16px" })
+            </aside>
         </div>
-    </div>
-}
+    }
+</div>

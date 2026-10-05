@@ -2,38 +2,36 @@
 @{
     ViewBag.Title = "Products";
 }
-<h2>Products</h2>
-<div class="row">
-    <div class="col-md-3">
-        @Html.Partial("_Sidebar")
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">Filter</h4>
-            </div>
-            <div class="panel-body">
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">@Html.ActionLink("Home", "Index", "Home") &rsaquo; Products</div>
+        <h1>All Products</h1>
+        <p>Browse the full catalog — filter by category or search.</p>
+    </div>
+    <div class="sc-shop">
+        <aside class="sc-filters">
+            <h3>Categories</h3>
+            @Html.Partial("_Sidebar")
+            <div class="sc-filter-group" style="margin-top:20px">
+                <label class="sc-flabel" for="filter-q">Search</label>
                 <form id="product-filter-form" method="get" action="@Url.Action("Filter", "Product")">
-                    <div class="form-group">
-                        <label for="filter-q">Search</label>
-                        <input type="text" id="filter-q" name="q" class="form-control" value="@Model.SearchQuery" placeholder="Keywords..." />
-                    </div>
-                    <div class="form-group">
-                        <label for="filter-category">Category</label>
-                        <select id="filter-category" name="categoryId" class="form-control">
-                            <option value="">All categories</option>
-                            @foreach (var c in Model.Categories)
-                            {
-                                <option value="@c.Id" @(Model.SelectedCategoryId == c.Id ? "selected" : "")>@c.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Apply filter</button>
+                    <input type="text" id="filter-q" name="q" class="sc-input" value="@Model.SearchQuery" placeholder="Keywords..." style="margin-bottom:12px" />
+                    <label class="sc-flabel" for="filter-category">Category</label>
+                    <select id="filter-category" name="categoryId" class="sc-input" style="margin-bottom:16px">
+                        <option value="">All categories</option>
+                        @foreach (var c in Model.Categories)
+                        {
+                            <option value="@c.Id" @(Model.SelectedCategoryId == c.Id ? "selected" : "")>@c.Name</option>
+                        }
+                    </select>
+                    <button type="submit" class="sc-btn sc-btn-primary sc-btn-block">Apply filter</button>
                 </form>
             </div>
-        </div>
-    </div>
-    <div class="col-md-9">
-        <div id="product-list">
-            @Html.Partial("_ProductList", Model)
+        </aside>
+        <div>
+            <div id="product-list">
+                @Html.Partial("_ProductList", Model)
+            </div>
         </div>
     </div>
 </div>

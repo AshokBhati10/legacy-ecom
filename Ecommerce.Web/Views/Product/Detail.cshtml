@@ -2,87 +2,119 @@
 @{
     ViewBag.Title = Model.Product.Name;
     var mainImage = Model.Images.FirstOrDefault(i => i.IsMain) ?? Model.Images.FirstOrDefault();
+    var mainImgUrl = mainImage != null ? mainImage.Url : Url.Content("~/Content/images/no-image.png");
+    var onSale = Model.Product.SalePrice.HasValue && Model.Product.SalePrice.Value > 0 && Model.Product.SalePrice.Value < Model.Product.Price;
+    var inStock = Model.Product.StockQuantity > 0;
 }
-<h2>@Model.Product.Name</h2>
-<div class="row">
-    <div class="col-md-6">
-        @if (mainImage != null)
-        {
-            <a data-fancybox="gallery" href="@mainImage.Url" data-caption="@Model.Product.Name">
-                <img src="@mainImage.Url" alt="@(string.IsNullOrWhiteSpace(mainImage.AltText) ? Model.Product.Name : mainImage.AltText)" class="img-responsive img-thumbnail" />
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">
+            @Html.ActionLink("Home", "Index", "Home") &rsaquo;
+            @Html.ActionLink("Products", "Index", "Product") &rsaquo;
+            @Model.Product.Name
+        </div>
+    </div>
+
+    <div class="sc-detail">
+        <div>
+            <a class="sc-gallery-main" data-fancybox="gallery" href="@mainImgUrl" data-caption="@Model.Product.Name">
+                <img src="@mainImgUrl" alt="@Model.Product.Name" />
             </a>
-            if (Model.Images.Count > 1)
+            @if (Model.Images.Count > 1)
             {
-                <div class="row product-thumbs">
+                <div class="sc-gallery-thumbs">
                     @foreach (var img in Model.Images)
                     {
-                        <div class="col-xs-3">
-                            <a data-fancybox="gallery" href="@img.Url" data-caption="@Model.Product.Name">
-                                <img src="@img.Url" alt="@(string.IsNullOrWhiteSpace(img.AltText) ? Model.Product.Name : img.AltText)" class="img-responsive img-thumbnail" />
-                            </a>
-                        </div>
+                        <a data-fancybox="gallery" href="@img.Url" data-caption="@Model.Product.Name">
+                            <img src="@img.Url" alt="@(string.IsNullOrWhiteSpace(img.AltText) ? Model.Product.Name : img.AltText)" loading="lazy" />
+                        </a>
                     }
                 </div>
             }
-        }
-        else
-        {
-            <img src="@Url.Content("~/Content/images/no-image.png")" alt="@Model.Product.Name" class="img-responsive img-thumbnail" />
-        }
-    </div>
-    <div class="col-md-6">
-        <p class="text-muted">SKU: @Model.Product.Sku | Category: @Model.Product.Category.Name</p>
-        <h3 class="product-price">
-            @if (Model.Product.SalePrice.HasValue && Model.Product.SalePrice.Value > 0)
-            {
-                <span class="text-muted"><s>@Model.Product.Price.ToString("C")</s></span>
-                <span class="text-danger">@Model.Product.SalePrice.Value.ToString("C")</span>
-            }
-            else
-            {
-                @Model.Product.Price.ToString("C")
-            }
-        </h3>
-        <p>@Model.Product.ShortDescription</p>
+        </div>
 
-        @using (Ajax.BeginForm("Add", "Cart", null,
-            new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
-            new { @class = "form-inline", id = "detail-add-form" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.Hidden("productId", Model.Product.Id)
-            if (Model.Variants.Count > 0)
+        <div class="sc-detail-info">
+            <span class="sc-pcard-cat">@Model.Product.Category.Name</span>
+            <h1>@Model.Product.Name</h1>
+            <p class="sc-detail-meta">SKU: @Model.Product.Sku</p>
+            <div class="sc-detail-price">
+                <span class="now">@Model.Product.EffectivePrice.ToString("C")</span>
+                @if (onSale)
+                {
+                    <span class="was">@Model.Product.Price.ToString("C")</span>
+                    <span class="save">Save @((Model.Product.Price - Model.Product.SalePrice.Value).ToString("C"))</span>
+                }
+            </div>
+            <p class="sc-detail-short">@Model.Product.ShortDescription</p>
+            <p class="sc-stock @(inStock ? "in" : "out")">
+                @(inStock ? "In stock — ready to ship" : "Out of stock")
+                @if (inStock) { <text>(@Model.Product.StockQuantity available)</text> }
+            </p>
+
+            @using (Ajax.BeginForm("Add", "Cart", null,
+                new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
+                new { id = "detail-add-form" }))
             {
-                <div class="form-group">
-                    <label for="variantId">Option</label>
-                    <select id="variantId" name="variantId" class="form-control">
-                        @foreach (var v in Model.Variants)
-                        {
-                            <option value="@v.Id">@v.Name (@v.PriceAdjustment.ToString("C"))</option>
-                        }
-                    </select>
+                @Html.AntiForgeryToken()
+                @Html.Hidden("productId", Model.Product.Id)
+                if (Model.Variants.Count > 0)
+                {
+                    <div class="sc-variant-row sc-field">
+                        <label for="variantId">Choose an option</label>
+                        <select id="variantId" name="variantId" class="sc-input">
+                            @foreach (var v in Model.Variants)
+                            {
+                                <option value="@v.Id">@v.Name (@v.PriceAdjustment.ToString("C"))</option>
+                            }
+                        </select>
+                    </div>
+                }
+                <div class="sc-buy-row">
+                    <span class="sc-qty">
+                        <button type="button" data-qty="-1" aria-label="Decrease quantity">−</button>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" aria-label="Quantity" />
+                        <button type="button" data-qty="1" aria-label="Increase quantity">+</button>
+                    </span>
+                    <button type="submit" class="sc-btn sc-btn-primary sc-btn-lg">Add to Cart</button>
                 </div>
             }
-            <div class="form-group">
-                <label for="quantity">Qty</label>
-                <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" class="form-control" style="width:80px" />
-            </div>
-            <button type="submit" class="btn btn-primary">Add to Cart</button>
-        }
 
-        <h4>Description</h4>
-        <p>@Model.Product.Description</p>
-        <p class="text-muted">Availability: @(Model.Product.StockQuantity > 0 ? Model.Product.StockQuantity + " in stock" : "Out of stock")</p>
+            <div class="sc-detail-tabs">
+                <h3>Description</h3>
+                <p>@Model.Product.Description</p>
+            </div>
+        </div>
     </div>
+
+    @if (Model.RelatedProducts.Count > 0)
+    {
+        <section class="sc-section">
+            <div class="sc-section-head">
+                <div><h2>You may also like</h2></div>
+            </div>
+            <div class="sc-product-grid">
+                @foreach (var p in Model.RelatedProducts)
+                {
+                    @Html.Partial("_ProductCard", p)
+                }
+            </div>
+        </section>
+    }
 </div>
 
-@if (Model.RelatedProducts.Count > 0)
-{
-    <h3>Related Products</h3>
-    <div class="row">
-        @foreach (var p in Model.RelatedProducts)
-        {
-            @Html.Partial("_ProductCard", p)
-        }
-    </div>
+@section scripts {
+    <script>
+        (function () {
+            var form = document.getElementById('detail-add-form');
+            if (!form) return;
+            var qty = form.querySelector('#quantity');
+            form.querySelectorAll('[data-qty]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var v = parseInt(qty.value || '1', 10) + parseInt(btn.getAttribute('data-qty'), 10);
+                    if (v < 1) v = 1; if (v > 99) v = 99;
+                    qty.value = v;
+                });
+            });
+        })();
+    </script>
 }

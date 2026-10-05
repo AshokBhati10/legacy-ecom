@@ -1,5 +1,48 @@
-@* Site footer. *@
-<footer class="site-footer">
-    <hr />
-    <p>&copy; @DateTime.Now.Year - Legacy eCommerce. A legacy ASP.NET MVC 5 reference store.</p>
+@* Shopcart footer: brand, shop links, account links, categories. *@
+<footer class="sc-footer">
+    <div class="sc-footer-top">
+        <div class="sc-container">
+            <div>
+                <a class="sc-logo" href="@Url.Action("Index", "Home")" aria-label="Shopcart home">
+                    <span class="sc-logo-mark">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+                    </span>
+                    <span class="sc-logo-name">Shop<em>cart</em></span>
+                </a>
+                <p class="sc-foot-blurb">A modern storefront for electronics, home essentials, sports gear, books and clothing — built on ASP.NET MVC 5.</p>
+            </div>
+            <div>
+                <h4>Shop</h4>
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("All Products", "Index", "Product")</li>
+                    <li>@Html.ActionLink("Shopping Cart", "Index", "Cart")</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("My Orders", "Orders", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Sign in", "Login", "Account")</li>
+                        <li>@Html.ActionLink("Register", "Register", "Account")</li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <h4>Categories</h4>
+                @Html.Action("CategoryTree", "Product", new { parentId = (int?)null })
+            </div>
+        </div>
+    </div>
+    <div class="sc-footer-bottom">
+        <div class="sc-container">
+            <span>&copy; @DateTime.Now.Year Shopcart. All rights reserved.</span>
+            <span>Secure checkout &middot; Quality products</span>
+        </div>
+    </div>
 </footer>

@@ -2,16 +2,20 @@
 @* Product grid fragment. Returned by GET /Product/Filter for AJAX replacement. *@
 @if (Model.Products.Count == 0)
 {
-    <div class="alert alert-info">No products match your filter. Try different keywords or another category.</div>
+    <div class="sc-empty">
+        <h3>No products found</h3>
+        <p>No products match your filter. Try different keywords or another category.</p>
+        @Html.ActionLink("Clear filters", "Index", "Product", null, new { @class = "sc-btn sc-btn-ghost" })
+    </div>
 }
 else
 {
-    <p class="text-muted">
-        Showing @Model.Products.Count of @Model.TotalCount product(s)
+    <p class="sc-result-meta">
+        Showing <strong>@Model.Products.Count</strong> of <strong>@Model.TotalCount</strong> product(s)
         @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
         { <text>for "<strong>@Model.SearchQuery</strong>"</text> }
     </p>
-    <div class="row">
+    <div class="sc-product-grid">
         @foreach (var p in Model.Products)
         {
             @Html.Partial("_ProductCard", p)
@@ -19,15 +23,16 @@ else
     </div>
     if (Model.TotalPages > 1)
     {
-        <nav aria-label="Product pages">
-            <ul class="pagination" id="product-pager">
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    <li class="@(i == Model.Page ? "active" : "")">
-                        <a href="@Url.Action("Filter", "Product", new { categoryId = Model.SelectedCategoryId, q = Model.SearchQuery, page = i })" data-page="@i">@i</a>
-                    </li>
-                }
-            </ul>
-        </nav>
+        <ul class="sc-pager" id="product-pager">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li>
+                    @if (i == Model.Page)
+                    { <span class="current">@i</span> }
+                    else
+                    { <a href="@Url.Action("Filter", "Product", new { categoryId = Model.SelectedCategoryId, q = Model.SearchQuery, page = i })" data-page="@i">@i</a> }
+                </li>
+            }
+        </ul>
     }
 }

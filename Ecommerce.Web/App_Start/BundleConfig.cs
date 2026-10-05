@@ -12,7 +12,8 @@ namespace Ecommerce.Web
                 "~/Content/themes/base/jquery-ui.css",
                 "~/Content/DataTables/css/jquery.dataTables.css",
                 "~/Content/fancybox/jquery.fancybox.min.css",
-                "~/Content/Site.css"));
+                "~/Content/Site.css",
+                "~/Content/shopcart.css"));
 
             // jQuery core (3.4.1)
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

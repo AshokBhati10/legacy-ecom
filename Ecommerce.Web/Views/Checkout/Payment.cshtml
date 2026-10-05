@@ -3,101 +3,90 @@
     ViewBag.Title = "Checkout - Payment";
     var summary = ViewBag.Summary as Ecommerce.Core.ViewModels.CheckoutSummaryViewModel;
 }
-<h2>Checkout</h2>
-<ol class="breadcrumb checkout-steps">
-    <li>@Html.ActionLink("1. Address", "Address", "Checkout")</li>
-    <li>@Html.ActionLink("2. Shipping", "Shipping", "Checkout")</li>
-    <li class="active">3. Payment</li>
-    <li>4. Confirmation</li>
-</ol>
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">@Html.ActionLink("Home", "Index", "Home") &rsaquo; @Html.ActionLink("Cart", "Index", "Cart") &rsaquo; Checkout</div>
+        <h1>Checkout</h1>
+    </div>
+    <ol class="sc-steps">
+        <li class="done">@Html.ActionLink("1. Address", "Address", "Checkout")</li>
+        <li class="done">@Html.ActionLink("2. Shipping", "Shipping", "Checkout")</li>
+        <li class="active">3. Payment</li>
+        <li>4. Confirmation</li>
+    </ol>
 
-<div class="row">
-    <div class="col-md-7">
-        @using (Html.BeginForm("Payment", "Checkout", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "payment-form" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="sc-checkout-layout">
+        <div class="sc-card">
+            <h3>Payment method</h3>
+            @using (Html.BeginForm("Payment", "Checkout", FormMethod.Post, new { role = "form", id = "payment-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <h4>Payment method</h4>
-            <div class="radio">
-                <label>
+                <label class="sc-pay-option">
                     @Html.RadioButtonFor(m => m.PaymentMethod, "CashOnDelivery", new { id = "pm-cod" })
-                    <strong>Cash on Delivery</strong> <small class="text-muted">- pay when your order arrives</small>
+                    <span><strong>Cash on Delivery</strong><br /><small class="text-muted">Pay when your order arrives</small></span>
                 </label>
-            </div>
-            <div class="radio">
-                <label>
+                <label class="sc-pay-option">
                     @Html.RadioButtonFor(m => m.PaymentMethod, "Card", new { id = "pm-card" })
-                    <strong>Credit / Debit Card</strong> <small class="text-muted">- demo only, no real charge is made</small>
+                    <span><strong>Credit / Debit Card</strong><br /><small class="text-muted">Demo only — no real charge is made</small></span>
                 </label>
-            </div>
 
-            <div id="card-fields" style="display:none">
-                <h4>Card details</h4>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.CardholderName, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.CardholderName, new { @class = "form-control" })
+                <div id="card-fields" style="display:none;margin-top:6px">
+                    <h3 style="margin-top:8px">Card details</h3>
+                    <div class="sc-field">
+                        @Html.LabelFor(m => m.CardholderName)
+                        @Html.TextBoxFor(m => m.CardholderName, new { @class = "sc-input" })
                         @Html.ValidationMessageFor(m => m.CardholderName, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.CardNumber, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.CardNumber, new { @class = "form-control", autocomplete = "off" })
+                    <div class="sc-field">
+                        @Html.LabelFor(m => m.CardNumber)
+                        @Html.TextBoxFor(m => m.CardNumber, new { @class = "sc-input", autocomplete = "off" })
                         @Html.ValidationMessageFor(m => m.CardNumber, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.Label("Expiry", new { @class = "col-md-3 control-label" })
-                    <div class="col-md-4">
-                        @Html.DropDownListFor(m => m.ExpiryMonth,
-                            Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString("00") }),
-                            "-- MM --", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                        <div class="sc-field">
+                            @Html.Label("Expiry month")
+                            @Html.DropDownListFor(m => m.ExpiryMonth,
+                                Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString("00") }),
+                                "-- MM --", new { @class = "sc-input" })
+                            @Html.ValidationMessageFor(m => m.ExpiryMonth, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="sc-field">
+                            @Html.Label("Expiry year")
+                            @Html.DropDownListFor(m => m.ExpiryYear,
+                                Enumerable.Range(System.DateTime.Now.Year, 15).Select(y => new SelectListItem { Value = y.ToString(), Text = y.ToString() }),
+                                "-- YYYY --", new { @class = "sc-input" })
+                            @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        @Html.DropDownListFor(m => m.ExpiryYear,
-                            Enumerable.Range(System.DateTime.Now.Year, 15).Select(y => new SelectListItem { Value = y.ToString(), Text = y.ToString() }),
-                            "-- YYYY --", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.ExpiryYear, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Cvv, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Cvv, new { @class = "form-control", autocomplete = "off", style = "width:100px" })
+                    <div class="sc-field" style="max-width:160px">
+                        @Html.LabelFor(m => m.Cvv)
+                        @Html.TextBoxFor(m => m.Cvv, new { @class = "sc-input", autocomplete = "off" })
                         @Html.ValidationMessageFor(m => m.Cvv, "", new { @class = "text-danger" })
                     </div>
+                    <p class="text-muted"><small>Demo checkout — card details are validated and never stored.</small></p>
                 </div>
-                <p class="text-muted"><small>Demo checkout — card details are validated in the browser and on the server, and are never stored.</small></p>
-            </div>
 
-            <div class="form-group" style="margin-top:15px">
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+                <div style="margin-top:20px">
+                    <button type="submit" class="sc-btn sc-btn-primary sc-btn-lg sc-btn-block">Place Order</button>
                 </div>
-            </div>
-        }
-    </div>
-    <div class="col-md-5">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="panel-title">Order Summary</h4></div>
-            <div class="panel-body">
-                @if (summary != null)
-                {
-                    foreach (var item in summary.Items)
-                    {
-                        <p>@item.Quantity x @item.ProductName <span class="pull-right">@item.LineTotal.ToString("C")</span></p>
-                    }
-                    <hr />
-                    <p>Subtotal: <span class="pull-right">@summary.SubTotal.ToString("C")</span></p>
-                    <p>Shipping (@summary.ShippingMethod): <span class="pull-right">@summary.ShippingCost.ToString("C")</span></p>
-                    <p>Tax: <span class="pull-right">@summary.TaxAmount.ToString("C")</span></p>
-                    <p><strong>Total: <span class="pull-right">@summary.Total.ToString("C")</span></strong></p>
-                }
-            </div>
+            }
         </div>
+        <aside class="sc-summary">
+            <h3>Order Summary</h3>
+            @if (summary != null)
+            {
+                foreach (var item in summary.Items)
+                {
+                    <div class="sc-summary-row"><span>@item.Quantity &times; @item.ProductName</span><span>@item.LineTotal.ToString("C")</span></div>
+                }
+                <div class="sc-summary-row"><span>Subtotal</span><span>@summary.SubTotal.ToString("C")</span></div>
+                <div class="sc-summary-row"><span>Shipping (@summary.ShippingMethod)</span><span>@summary.ShippingCost.ToString("C")</span></div>
+                <div class="sc-summary-row"><span>Tax</span><span>@summary.TaxAmount.ToString("C")</span></div>
+                <div class="sc-summary-row total"><span>Total</span><span>@summary.Total.ToString("C")</span></div>
+            }
+        </aside>
     </div>
 </div>
 

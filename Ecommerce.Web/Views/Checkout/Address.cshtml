@@ -2,88 +2,82 @@
 @{
     ViewBag.Title = "Checkout - Address";
 }
-<h2>Checkout</h2>
-<ol class="breadcrumb checkout-steps">
-    <li class="active">1. Address</li>
-    <li>2. Shipping</li>
-    <li>3. Payment</li>
-    <li>4. Confirmation</li>
-</ol>
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">@Html.ActionLink("Home", "Index", "Home") &rsaquo; @Html.ActionLink("Cart", "Index", "Cart") &rsaquo; Checkout</div>
+        <h1>Checkout</h1>
+    </div>
+    <ol class="sc-steps">
+        <li class="active">1. Address</li>
+        <li>2. Shipping</li>
+        <li>3. Payment</li>
+        <li>4. Confirmation</li>
+    </ol>
 
-@using (Html.BeginForm("Address", "Checkout", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="sc-card" style="max-width:720px">
+        <h3>Where should we deliver your order?</h3>
+        @using (Html.BeginForm("Address", "Checkout", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-        </div>
+            <div class="sc-field">
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "sc-input", type = "email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.FirstName)
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                </div>
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.LastName)
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="sc-field">
+                @Html.LabelFor(m => m.Phone)
+                @Html.TextBoxFor(m => m.Phone, new { @class = "sc-input" })
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+            </div>
+            <div class="sc-field">
+                @Html.LabelFor(m => m.Street)
+                @Html.TextBoxFor(m => m.Street, new { @class = "sc-input" })
+                @Html.ValidationMessageFor(m => m.Street, "", new { @class = "text-danger" })
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.City)
+                    @Html.TextBoxFor(m => m.City, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                </div>
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.State)
+                    @Html.TextBoxFor(m => m.State, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.PostalCode)
+                    @Html.TextBoxFor(m => m.PostalCode, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="sc-field">
+                    @Html.LabelFor(m => m.Country)
+                    @Html.TextBoxFor(m => m.Country, new { @class = "sc-input" })
+                    @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div style="margin-top:10px">
+                <button type="submit" class="sc-btn sc-btn-primary sc-btn-lg">Continue to Shipping</button>
+            </div>
+        }
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Street, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.Street, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Street, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.State, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.State, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.PostalCode, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Country, new { @class = "col-md-2 control-label" })
-        <div class="col-md-6">
-            @Html.TextBoxFor(m => m.Country, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-6">
-            <button type="submit" class="btn btn-primary">Continue to Shipping</button>
-        </div>
-    </div>
-}
+</div>
 
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")

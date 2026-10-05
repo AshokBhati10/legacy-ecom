@@ -118,3 +118,13 @@ var legacyEcom = legacyEcom || {};
         }
     });
 })(jQuery);
+
+/* Shopcart theme: mobile menu toggle. */
+(function ($) {
+    'use strict';
+    $(function () {
+        $('#sc-menu-toggle').on('click', function () {
+            $('#sc-mobile-panel').toggleClass('open');
+        });
+    });
+})(jQuery);

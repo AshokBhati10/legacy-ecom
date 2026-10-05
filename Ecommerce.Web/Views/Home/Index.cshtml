@@ -2,36 +2,172 @@
 @{
     ViewBag.Title = "Home";
     var categories = ViewBag.Categories as IList<Ecommerce.Core.ViewModels.CategoryViewModel>;
+    var deals = Model.Products.Where(p => p.SalePrice.HasValue && p.SalePrice.Value > 0 && p.SalePrice.Value < p.Price).Take(4).ToList();
+    if (deals.Count == 0) { deals = Model.Products.Take(4).ToList(); }
+    var popular = Model.Products.Except(deals).Take(4).ToList();
+    if (popular.Count == 0) { popular = Model.Products.Skip(4).Take(4).ToList(); }
 }
-<div class="jumbotron hero-banner">
-    <h1>Welcome to Legacy eCommerce</h1>
-    <p class="lead">A classic ASP.NET MVC 5 storefront — browse the catalog, filter products, and check out in a few easy steps.</p>
-    <p>@Html.ActionLink("Shop all products", "Index", "Product", null, new { @class = "btn btn-primary btn-lg" })</p>
-</div>
+@functions {
+    public IHtmlString CategoryIcon(string name)
+    {
+        name = (name ?? "").ToLowerInvariant();
+        string inner;
+        if (name.Contains("audio"))
+        { inner = "<path d=\"M3 18v-6a9 9 0 0 1 18 0v6\"/><path d=\"M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z\"/>"; }
+        else if (name.Contains("home") || name.Contains("kitchen"))
+        { inner = "<path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><polyline points=\"9 22 9 12 15 12 15 22\"/>"; }
+        else if (name.Contains("sport") || name.Contains("outdoor"))
+        { inner = "<path d=\"M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11\"/>"; }
+        else if (name.Contains("book"))
+        { inner = "<path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/>"; }
+        else if (name.Contains("cloth"))
+        { inner = "<path d=\"M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\"/>"; }
+        else
+        { inner = "<rect x=\"2\" y=\"3\" width=\"20\" height=\"14\" rx=\"2\" ry=\"2\"/><line x1=\"8\" y1=\"21\" x2=\"16\" y2=\"21\"/><line x1=\"12\" y1=\"17\" x2=\"12\" y2=\"21\"/>"; }
+        return new HtmlString("<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">" + inner + "</svg>");
+    }
+}
 
-@if (categories != null && categories.Count > 0)
-{
-    <h2>Featured Categories</h2>
-    <div class="row">
-        @foreach (var c in categories.Take(4))
-        {
-            <div class="col-sm-6 col-md-3">
-                <div class="panel panel-default category-tile">
-                    <div class="panel-body text-center">
-                        <h4>@c.Name</h4>
-                        <p class="text-muted">@c.Description</p>
-                        @Html.ActionLink("Browse", "Index", "Product", new { categoryId = c.Id }, new { @class = "btn btn-default btn-sm" })
-                    </div>
+<div class="sc-container">
+    @* ---------- Hero ---------- *@
+    <section class="sc-hero">
+        <div class="sc-container">
+            <div>
+                <span class="sc-hero-kicker">New season collection</span>
+                <h1>Everything you love, <em>delivered fast.</em></h1>
+                <p class="sc-lead">Shop electronics, home essentials, sports gear, books and clothing — quality products at honest prices, checked out in a few easy steps.</p>
+                <div class="sc-hero-cta">
+                    @Html.ActionLink("Shop now", "Index", "Product", null, new { @class = "sc-btn sc-btn-primary sc-btn-lg" })
+                    @Html.ActionLink("Today's deals", "Index", "Product", null, new { @class = "sc-btn sc-btn-ghost sc-btn-lg" })
                 </div>
             </div>
-        }
-    </div>
-}
+            <div class="sc-hero-art">
+                <img src="@Url.Content("~/Content/images/hero-shopping.jpg")" alt="Happy shopper with bags" />
+                <div class="sc-hero-chip c1">
+                    <span class="sc-chip-ico">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </span>
+                    <span>Fast delivery<small>On all orders</small></span>
+                </div>
+                <div class="sc-hero-chip c2">
+                    <span class="sc-chip-ico">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </span>
+                    <span>Secure checkout<small>Buyer protection</small></span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<h2>Latest Products</h2>
-<div class="row">
-    @foreach (var p in Model.Products)
+    @* ---------- Categories ---------- *@
+    @if (categories != null && categories.Count > 0)
     {
-        @Html.Partial("_ProductCard", p)
+        <section class="sc-section">
+            <div class="sc-section-head">
+                <div>
+                    <h2>Shop our top categories</h2>
+                    <p>Find exactly what you're looking for</p>
+                </div>
+            </div>
+            <div class="sc-cat-grid">
+                @foreach (var c in categories.Take(6))
+                {
+                    <a class="sc-cat-card" href="@Url.Action("Index", "Product", new { categoryId = c.Id })">
+                        <span class="sc-cat-circle">@CategoryIcon(c.Name)</span>
+                        <h3>@c.Name</h3>
+                        <p>@c.Description</p>
+                    </a>
+                }
+            </div>
+        </section>
     }
+
+    @* ---------- Deals ---------- *@
+    <section class="sc-section">
+        <div class="sc-section-head">
+            <div>
+                <h2>Today's best deals for you!</h2>
+                <p>Great prices on popular items</p>
+            </div>
+            @Html.ActionLink("View all products", "Index", "Product", null, new { @class = "sc-section-link" })
+        </div>
+        <div class="sc-product-grid">
+            @foreach (var p in deals)
+            {
+                @Html.Partial("_ProductCard", p)
+            }
+        </div>
+    </section>
+
+    @* ---------- Promo banner ---------- *@
+    <section class="sc-promo">
+        <div class="sc-container">
+            <div>
+                <h2>Season sale is <em>on now</em></h2>
+                <p>Explore electronics, home furnishing and more at refreshing prices. New deals added across the catalog every week.</p>
+                @Html.ActionLink("Shop the collection", "Index", "Product", null, new { @class = "sc-btn sc-btn-ghost sc-btn-lg" })
+            </div>
+            <div class="sc-promo-art">
+                <span class="sc-promo-stat"><strong>@Model.TotalCount+</strong><span>products in the catalog</span></span>
+            </div>
+        </div>
+    </section>
+
+    @* ---------- Popular ---------- *@
+    @if (popular.Count > 0)
+    {
+        <section class="sc-section">
+            <div class="sc-section-head">
+                <div>
+                    <h2>Weekly popular products</h2>
+                    <p>Customer favorites this week</p>
+                </div>
+                @Html.ActionLink("View all products", "Index", "Product", null, new { @class = "sc-section-link" })
+            </div>
+            <div class="sc-product-grid">
+                @foreach (var p in popular)
+                {
+                    @Html.Partial("_ProductCard", p)
+                }
+            </div>
+        </section>
+    }
+
+    @* ---------- Services ---------- *@
+    <section class="sc-section">
+        <div class="sc-section-head">
+            <div>
+                <h2>Services to help you shop</h2>
+            </div>
+        </div>
+        <div class="sc-service-grid">
+            <div class="sc-service-card">
+                <span class="sc-chip-ico">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </span>
+                <div>
+                    <h3>Frequently asked questions</h3>
+                    <p>Track your order from checkout to your doorstep with live status updates.</p>
+                </div>
+            </div>
+            <div class="sc-service-card">
+                <span class="sc-chip-ico">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </span>
+                <div>
+                    <h3>Online payment process</h3>
+                    <p>Pay securely by card or cash on delivery — your details are never stored.</p>
+                </div>
+            </div>
+            <div class="sc-service-card">
+                <span class="sc-chip-ico">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </span>
+                <div>
+                    <h3>Home delivery options</h3>
+                    <p>Choose standard or express shipping at checkout and follow your parcel home.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

@@ -2,39 +2,49 @@
 @{
     ViewBag.Title = "My Orders";
 }
-<h2>My Orders</h2>
-@if (Model.Orders.Count == 0)
-{
-    <div class="alert alert-info">
-        You have no orders yet. @Html.ActionLink("Start shopping", "Index", "Product").
+<div class="sc-container">
+    <div class="sc-page-head">
+        <div class="sc-crumbs">@Html.ActionLink("Home", "Index", "Home") &rsaquo; My Orders</div>
+        <h1>My Orders</h1>
+        <p>Your order history and statuses.</p>
     </div>
-}
-else
-{
-    <table id="orders-table" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Order Number</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Items</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var o in Model.Orders)
-            {
-                <tr>
-                    <td>@o.OrderNumber</td>
-                    <td>@o.OrderDate.ToLocalTime().ToString("g")</td>
-                    <td>@o.Status</td>
-                    <td>@o.ItemCount</td>
-                    <td>@o.Total.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (Model.Orders.Count == 0)
+    {
+        <div class="sc-empty">
+            <h3>No orders yet</h3>
+            <p>You haven't placed any orders. When you do, they'll show up here.</p>
+            @Html.ActionLink("Start shopping", "Index", "Product", null, new { @class = "sc-btn sc-btn-primary" })
+        </div>
+    }
+    else
+    {
+        <div class="sc-card" style="padding:18px;overflow-x:auto">
+            <table id="orders-table" class="sc-table">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Items</th>
+                        <th style="text-align:right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model.Orders)
+                    {
+                        <tr>
+                            <td><strong>@o.OrderNumber</strong></td>
+                            <td>@o.OrderDate.ToLocalTime().ToString("g")</td>
+                            <td><span class="sc-status">@o.Status</span></td>
+                            <td>@o.ItemCount</td>
+                            <td style="text-align:right"><strong>@o.Total.ToString("C")</strong></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
 @section scripts {
     <script type="text/javascript">

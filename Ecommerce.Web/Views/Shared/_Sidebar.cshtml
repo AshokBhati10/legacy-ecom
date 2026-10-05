@@ -1,10 +1,4 @@
 @* Category sidebar: nested tree, child levels lazy-loaded via jQuery AJAX. *@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">Categories</h4>
-    </div>
-    <div class="panel-body category-sidebar">
-        <p>@Html.ActionLink("All Products", "Index", "Product")</p>
-        @Html.Action("CategoryTree", "Product", new { parentId = (int?)null })
-    </div>
+<div class="category-sidebar">
+    @Html.Action("CategoryTree", "Product", new { parentId = (int?)null })
 </div>

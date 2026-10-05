@@ -1,38 +1,39 @@
 @model Ecommerce.Core.ViewModels.ProductCardViewModel
-@* Single product card used by the catalog grid and home page. *@
-<div class="col-sm-6 col-md-4 col-lg-3 product-card">
-    <div class="thumbnail">
-        <a href="@Url.Action("Detail", "Product", new { id = Model.Id })">
-            <img src="@(string.IsNullOrWhiteSpace(Model.ThumbnailUrl) ? Url.Content("~/Content/images/no-image.png") : Model.ThumbnailUrl)"
-                 alt="@Model.Name" class="img-responsive product-thumb" />
-        </a>
-        <div class="caption">
-            <h4 class="product-name">
-                <a href="@Url.Action("Detail", "Product", new { id = Model.Id })">@Model.Name</a>
-            </h4>
-            <p class="product-price">
-                @if (Model.SalePrice.HasValue && Model.SalePrice.Value > 0)
-                {
-                    <span class="text-muted"><s>@Model.Price.ToString("C")</s></span>
-                    <strong class="text-danger">@Model.SalePrice.Value.ToString("C")</strong>
-                }
-                else
-                {
-                    <strong>@Model.Price.ToString("C")</strong>
-                }
-            </p>
-            <p>
-                @using (Ajax.BeginForm("Add", "Cart", null,
-                    new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
-                    new { @class = "add-to-cart-form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden("productId", Model.Id)
-                    @Html.Hidden("quantity", 1)
-                    <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
-                    @Html.ActionLink("Details", "Detail", "Product", new { id = Model.Id }, new { @class = "btn btn-default btn-sm" })
-                }
-            </p>
+@* Shopcart product card. Used by the home page, catalog grid and related-products. *@
+@{
+    var img = string.IsNullOrWhiteSpace(Model.ThumbnailUrl) ? Url.Content("~/Content/images/no-image.png") : Model.ThumbnailUrl;
+    var onSale = Model.SalePrice.HasValue && Model.SalePrice.Value > 0 && Model.SalePrice.Value < Model.Price;
+}
+<div class="sc-pcard">
+    <a class="sc-pcard-media" href="@Url.Action("Detail", "Product", new { id = Model.Id })" aria-label="@Model.Name">
+        @if (onSale)
+        {
+            <span class="sc-pcard-badge">Sale</span>
+        }
+        <img src="@img" alt="@Model.Name" loading="lazy" />
+    </a>
+    <div class="sc-pcard-body">
+        <h3 class="sc-pcard-name">
+            <a href="@Url.Action("Detail", "Product", new { id = Model.Id })">@Model.Name</a>
+        </h3>
+        <div class="sc-pcard-price">
+            <span class="now">@Model.DisplayPrice.ToString("C")</span>
+            @if (onSale)
+            {
+                <span class="was">@Model.Price.ToString("C")</span>
+            }
+        </div>
+        <div class="sc-pcard-actions">
+            @using (Ajax.BeginForm("Add", "Cart", null,
+                new AjaxOptions { HttpMethod = "POST", OnSuccess = "legacyEcom.cartAdded", OnFailure = "legacyEcom.cartFailed" },
+                new { @class = "add-to-cart-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("productId", Model.Id)
+                @Html.Hidden("quantity", 1)
+                <button type="submit" class="sc-btn sc-btn-primary sc-btn-sm">Add to Cart</button>
+            }
+            @Html.ActionLink("Details", "Detail", "Product", new { id = Model.Id }, new { @class = "sc-btn sc-btn-ghost sc-btn-sm" })
         </div>
     </div>
 </div>
